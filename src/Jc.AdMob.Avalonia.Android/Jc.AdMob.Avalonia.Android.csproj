@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net8.0-android</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Title>Jc AdMob Avalonia</Title>
+        <Authors>Joseph Sawyer</Authors>
+        <Copyright>Joseph Sawyer</Copyright>
+        <Description>Google AdMob for Avalonia on Android.</Description>
+        <PackageProjectUrl>https://jcsawyer.com/</PackageProjectUrl>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <RepositoryUrl>https://github.com/jcsawyer/Jc.AdMob.Avalonia/tree/main</RepositoryUrl>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Avalonia" Version="$(AvaloniaVersion)" />
+        <PackageReference Include="Avalonia.Android" Version="$(AvaloniaVersion)" />
+        <PackageReference Include="Xamarin.GooglePlayServices.Ads.Lite" Version="122.6.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Jc.AdMob.Avalonia\Jc.AdMob.Avalonia.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\..\LICENSE" Pack="true" PackagePath="" />
+        <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+    </ItemGroup>
+</Project>

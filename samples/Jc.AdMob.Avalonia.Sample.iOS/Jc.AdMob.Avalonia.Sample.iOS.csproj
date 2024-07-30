@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net8.0-ios</TargetFramework>
+        <SupportedOSPlatformVersion>11.0</SupportedOSPlatformVersion>
+        <ProvisioningType>manual</ProvisioningType>
+        <Nullable>enable</Nullable>
+        <RuntimeIdentifier>iossimulator-x64</RuntimeIdentifier>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <CodesignKey>iPhone Developer</CodesignKey>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Avalonia.iOS" Version="$(AvaloniaVersion)"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <!--<ProjectReference Include="..\..\src\Jc.AdMob.Avalonia.iOS\Jc.AdMob.Avalonia.iOS.csproj" />-->
+        <ProjectReference Include="..\..\src\Jc.AdMob.Avalonia.iOS\Jc.AdMob.Avalonia.iOS.csproj" />
+        <ProjectReference Include="..\Jc.AdMob.Avalonia.Sample\Jc.AdMob.Avalonia.Sample.csproj"/>
+    </ItemGroup>
+</Project>
