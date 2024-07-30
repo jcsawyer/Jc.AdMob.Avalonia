@@ -6,6 +6,7 @@
         <ProvisioningType>manual</ProvisioningType>
         <Nullable>enable</Nullable>
         <RuntimeIdentifier>iossimulator-x64</RuntimeIdentifier>
+        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
       <CodesignKey>iPhone Developer</CodesignKey>
