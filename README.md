@@ -24,12 +24,12 @@ The library currently supports the following ad units:
 
 | | Banner | Interstitial | Rewarded interstitial | Rewarded | Native advanced | App open |
 |---|---|---|---|---|---|---|
-| Android | ✓ | ☓ | ☓ | ☓ | ☓ | ☓ | ☓ |
-| iOS | ✓ | ☓ | ☓ | ☓ | ☓ | ☓ | ☓ |
+| Android | ✓ | ✓ | ☓ | ☓ | ☓ | ☓ | ☓ |
+| iOS | ✓ | ✓ | ☓ | ☓ | ☓ | ☓ | ☓ |
 
 ## Usage
 
-To use Jc.AdMob.Avalonia you must add the `Jc.AdMob.Avalonia` pacakge to your cross-platform project.
+To use Jc.AdMob.Avalonia you must add the `Jc.AdMob.Avalonia` package to your cross-platform project.
 
 ```
 dotnet add package Jc.AdMob.Avalonia
@@ -53,7 +53,18 @@ protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
 }
 ```
 
+Finally, follow the AdMob platform specific instructions in regard to configuring the application/unit ids. 
+
+### Test Devices
+
+To configure test devices, the `.UseAdMob()` method accepts a collection of test device ids.
+
 ### Banners
+
+| iOS                               | Android |
+|-----------------------------------|---|
+| <img alt="iOS Banner" src="img/iOS Banner.png" width="250" /> | <img alt="iOS Banner" src="img/Android Banner.jpeg" width="250" /> |
+
 
 The `BannerAd` control can be added to your XAML like so:
 
@@ -93,3 +104,13 @@ The banner exposes the following events:
 | OnAdOpened | |
 | OnAdClosed | |
 | OnAdSwiped | Android only |
+
+### Interstitial
+
+| iOS                               | Android |
+|-----------------------------------|---|
+| <img alt="iOS Banner" src="img/iOS Interstitial.png" width="250" /> | <img alt="iOS Banner" src="img/Android Interstitial.jpeg" width="250" /> |
+
+Interstitial ads can be used by instantiating `InterstitialAd` in your `App` or DI container and calling `InterstitialAd.Create(unitId)`.
+
+This call will load the return the interstitial ad with an `OnAdLoaded` event once it's finished loaded. `.Show()` can then be called to display the ad.

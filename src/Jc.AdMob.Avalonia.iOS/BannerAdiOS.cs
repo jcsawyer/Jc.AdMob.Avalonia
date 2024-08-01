@@ -8,6 +8,13 @@ internal sealed class BannerAdiOS : INativeBannerAd
 {
     private const string TestUnit = "ca-app-pub-3940256099942544/2435281174";
 
+    private readonly IReadOnlyCollection<string>? _testDeviceIds;
+
+    public BannerAdiOS(IReadOnlyCollection<string>? testDeviceIds = null)
+    {
+        _testDeviceIds = testDeviceIds;
+    }
+
     public IPlatformHandle CreateControl(
         string? unitId,
         BannerAd wrapper,
@@ -32,12 +39,9 @@ internal sealed class BannerAdiOS : INativeBannerAd
             RootViewController = GetRootViewController(),
         };
 
-        if (string.IsNullOrWhiteSpace(unitId))
+        if (_testDeviceIds is not null)
         {
-            MobileAds.SharedInstance.RequestConfiguration.TestDeviceIdentifiers =
-            [
-                AdSupport.ASIdentifierManager.SharedManager.AdvertisingIdentifier.ToString(),
-            ];
+            MobileAds.SharedInstance.RequestConfiguration.TestDeviceIdentifiers = _testDeviceIds.ToArray();
         }
 
         var request = Request.GetDefaultRequest();
@@ -69,7 +73,7 @@ internal sealed class BannerAdiOS : INativeBannerAd
 
         return null;
     }
-    
+
     private static Google.MobileAds.AdSize GetSize(int width, int height)
     {
         return new Google.MobileAds.AdSize

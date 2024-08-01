@@ -14,7 +14,11 @@
   </Design.DataContext>
 
     <Grid ColumnDefinitions="*" RowDefinitions="*, Auto">
-      <TextBlock Grid.Row="0" Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+      <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <TextBlock Grid.Row="0" Text="{Binding Greeting}" HorizontalAlignment="Center" />
+        <Button Content="Show Interstitial Ad" Command="{Binding ShowInterstitialAdCommand}"></Button>
+      </StackPanel>
+      
       <Border Grid.Row="1" Background="Beige" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <admob:BannerAd UnitId="" OnAdFailedToLoad="BannerAd_OnOnAdFailedToLoad" />
       </Border>

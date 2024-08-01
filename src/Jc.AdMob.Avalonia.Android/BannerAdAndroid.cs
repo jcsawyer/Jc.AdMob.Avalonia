@@ -9,6 +9,13 @@ namespace Jc.AdMob.Avalonia.Android;
 internal sealed class BannerAdAndroid : INativeBannerAd
 {
     private const string TestUnit = "ca-app-pub-3940256099942544/9214589741";
+
+    private readonly IReadOnlyCollection<string>? _testDeviceIds;
+
+    public BannerAdAndroid(IReadOnlyCollection<string>? testDeviceIds)
+    {
+        _testDeviceIds = testDeviceIds;
+    }
     
     public IPlatformHandle CreateControl(
         string? unitId, BannerAd wrapper,
@@ -38,7 +45,10 @@ internal sealed class BannerAdAndroid : INativeBannerAd
         };
 
         var configBuilder = new RequestConfiguration.Builder();
-        configBuilder.SetTestDeviceIds(new List<string>());
+        if (_testDeviceIds is not null)
+        {
+            configBuilder.SetTestDeviceIds(_testDeviceIds.ToList());
+        }
         MobileAds.RequestConfiguration = configBuilder.Build();
 
         var requestBuilder = new AdRequest.Builder();
