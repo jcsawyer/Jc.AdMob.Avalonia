@@ -114,3 +114,28 @@ The banner exposes the following events:
 Interstitial ads can be used by instantiating `InterstitialAd` in your `App` or DI container and calling `InterstitialAd.Create(unitId)`.
 
 This call will load the return the interstitial ad with an `OnAdLoaded` event once it's finished loaded. `.Show()` can then be called to display the ad.
+
+#### Android
+
+When using interstitial ads on Android, the `Activity` must be passed into the `.AddAdMob()` call:
+
+```c#
+protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
+{
+    return base.CustomizeAppBuilder(builder)
+        ...
+        .UseAdMob(this);
+}
+```
+
+#### Events
+
+| Event | Notes |
+|---|---|
+| OnAdLoaded | |
+| OnAdFailedToLoad | |
+| OnAdPresented | |
+| OnAdFailedToPresent | |
+| OnAdImpression | |
+| OnAdClicked | |
+| OnAdClosed | |
