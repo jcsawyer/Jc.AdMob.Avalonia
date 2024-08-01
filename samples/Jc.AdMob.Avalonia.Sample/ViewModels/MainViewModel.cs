@@ -21,6 +21,5 @@ public class MainViewModel : ViewModelBase
     {
         var interstitial = App.InterstitialAd.Create();
         interstitial.OnAdLoaded += (_, _) => interstitial.Show();
-        interstitial.OnAdFailedToLoad += (s, e) => Debug.WriteLine(e);
     }
 }
