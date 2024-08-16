@@ -20,6 +20,12 @@ public class MainActivity : AvaloniaMainActivity<App>
         return base.CustomizeAppBuilder(builder)
             .WithInterFont()
             .UseReactiveUI()
-            .UseAdMob(this);
+            .UseAdMob(this, new AdMobOptions
+            {
+                TestDeviceIds = ["00000000-0000-0000-0000-000000000000"],
+                TagForUnderAgeOfConsent = false,
+                TagForChildDirectedTreatment = false,
+                AppId = "ca-app-pub-9127086931863581~2923947432",
+            });
     }
 }

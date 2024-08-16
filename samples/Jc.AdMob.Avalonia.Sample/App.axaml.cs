@@ -8,8 +8,6 @@ namespace Jc.AdMob.Avalonia.Sample;
 
 public partial class App : Application
 {
-    internal static readonly InterstitialAd InterstitialAd = new InterstitialAd();
-    
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);

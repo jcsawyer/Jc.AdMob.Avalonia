@@ -8,11 +8,17 @@ internal sealed class BannerAdiOS : INativeBannerAd
 {
     private const string TestUnit = "ca-app-pub-3940256099942544/2435281174";
 
+    private readonly AdMobOptions? _options;
     private readonly IReadOnlyCollection<string>? _testDeviceIds;
 
     public BannerAdiOS(IReadOnlyCollection<string>? testDeviceIds = null)
     {
         _testDeviceIds = testDeviceIds;
+    }
+
+    internal BannerAdiOS(AdMobOptions options)
+    {
+        _options = options;
     }
 
     public IPlatformHandle CreateControl(
@@ -39,12 +45,32 @@ internal sealed class BannerAdiOS : INativeBannerAd
             RootViewController = GetRootViewController(),
         };
 
+        if (_options is null || AdMob.Current.CanShowAds)
+        {
+            RenderBanner(adView, wrapper);
+        }
+        else
+        {
+            AdMob.Current.Consent.OnConsentProvided += (_, _) =>
+            {
+                RenderBanner(adView, wrapper);
+            };
+        }
+
+        wrapper.Width = adSize.Size.Width;
+        wrapper.Height = adSize.Size.Height;
+
+        return new UIViewControlHandle(adView);
+    }
+    
+    private void RenderBanner(BannerView adView, BannerAd wrapper)
+    {
         if (_testDeviceIds is not null)
         {
             MobileAds.SharedInstance.RequestConfiguration.TestDeviceIdentifiers = _testDeviceIds.ToArray();
         }
 
-        var request = Request.GetDefaultRequest();
+        var request = _options is null ? Request.GetDefaultRequest() : AdRequest.GetRequest();
 
         adView.AdReceived += wrapper.AdLoaded;
         adView.ReceiveAdFailed += (s, e) => wrapper.AdFailedToLoad(s, new AdError(e.Error.DebugDescription));
@@ -54,11 +80,6 @@ internal sealed class BannerAdiOS : INativeBannerAd
         adView.ScreenDismissed += wrapper.AdClosed;
 
         adView.LoadRequest(request);
-
-        wrapper.Width = adSize.Size.Width;
-        wrapper.Height = adSize.Size.Height;
-
-        return new UIViewControlHandle(adView);
     }
 
     private UIViewController GetRootViewController()

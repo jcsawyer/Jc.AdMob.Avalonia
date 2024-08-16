@@ -17,8 +17,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <!--<ProjectReference Include="..\..\src\Jc.AdMob.Avalonia.iOS\Jc.AdMob.Avalonia.iOS.csproj" />-->
         <ProjectReference Include="..\..\src\Jc.AdMob.Avalonia.iOS\Jc.AdMob.Avalonia.iOS.csproj" />
+        <ProjectReference Include="..\..\src\Jc.AdMob.Avalonia\Jc.AdMob.Avalonia.csproj" />
         <ProjectReference Include="..\Jc.AdMob.Avalonia.Sample\Jc.AdMob.Avalonia.Sample.csproj"/>
     </ItemGroup>
 </Project>

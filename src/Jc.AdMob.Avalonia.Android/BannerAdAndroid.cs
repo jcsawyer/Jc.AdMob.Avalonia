@@ -10,13 +10,19 @@ internal sealed class BannerAdAndroid : INativeBannerAd
 {
     private const string TestUnit = "ca-app-pub-3940256099942544/9214589741";
 
+    private readonly AdMobOptions? _options;
     private readonly IReadOnlyCollection<string>? _testDeviceIds;
 
     public BannerAdAndroid(IReadOnlyCollection<string>? testDeviceIds)
     {
         _testDeviceIds = testDeviceIds;
     }
-    
+
+    internal BannerAdAndroid(AdMobOptions options)
+    {
+        _options = options;
+    }
+
     public IPlatformHandle CreateControl(
         string? unitId, BannerAd wrapper,
         IPlatformHandle parent,
@@ -44,15 +50,38 @@ internal sealed class BannerAdAndroid : INativeBannerAd
             AdUnitId = string.IsNullOrWhiteSpace(unitId) ? TestUnit : unitId,
         };
 
+        if (_options is null || AdMob.Current.CanShowAds)
+        {
+            RenderBanner(adView, wrapper);
+        }
+        else
+        {
+            AdMob.Current.Consent.OnConsentProvided += (_, _) => { RenderBanner(adView, wrapper); };
+        }
+
+        wrapper.Width = adSize.Width;
+        wrapper.Height = adSize.Height;
+
+        return new AndroidViewControlHandle(adView);
+    }
+
+    private void RenderBanner(AdView adView, BannerAd wrapper)
+    {
         var configBuilder = new RequestConfiguration.Builder();
-        if (_testDeviceIds is not null)
+        if (_options.TestDeviceIds is not null)
+        {
+            configBuilder.SetTestDeviceIds(_options.TestDeviceIds.ToList());
+        }
+        else if (_testDeviceIds is not null)
         {
             configBuilder.SetTestDeviceIds(_testDeviceIds.ToList());
         }
+
         MobileAds.RequestConfiguration = configBuilder.Build();
 
-        var requestBuilder = new AdRequest.Builder();
-        var adRequest = requestBuilder.Build();
+        var adRequest = _options is null
+            ? new global::Android.Gms.Ads.AdRequest.Builder().Build()
+            : AdRequest.GetRequest(typeof(BannerAdAndroid));
 
         var listener = new BannerAdListener();
         listener.AdLoaded += wrapper.AdLoaded;
@@ -65,15 +94,10 @@ internal sealed class BannerAdAndroid : INativeBannerAd
 
         adView.AdListener = listener;
         adView.LoadAd(adRequest);
-
-        
-        wrapper.Width = adSize.Width;
-        wrapper.Height = adSize.Height;
-
-        return new AndroidViewControlHandle(adView);
     }
-    
-    [Obsolete("This call site is reachable on: 'Android' 21.0 and later. 'Display.GetMetrics(DisplayMetrics?)' is obsoleted on: 'Android' 30.0 and later.")]
+
+    [Obsolete(
+        "This call site is reachable on: 'Android' 21.0 and later. 'Display.GetMetrics(DisplayMetrics?)' is obsoleted on: 'Android' 30.0 and later.")]
     int GetScreenWidth(Context context)
     {
         var displayMetrics = new DisplayMetrics();

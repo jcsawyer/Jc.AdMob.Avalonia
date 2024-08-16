@@ -19,6 +19,11 @@ public partial class AppDelegate : AvaloniaAppDelegate<App>
         return base.CustomizeAppBuilder(builder)
             .WithInterFont()
             .UseReactiveUI()
-            .UseAdMob();
+            .UseAdMob(new AdMobOptions
+            {
+                TestDeviceIds = ["00000000-0000-0000-0000-000000000000"],
+                TagForUnderAgeOfConsent = false,
+                TagForChildDirectedTreatment = false,
+            });
     }
 }

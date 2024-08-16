@@ -6,6 +6,7 @@ public sealed class InterstitialAd : IInterstitialAd
 {
     private const string TestUnit = "ca-app-pub-3940256099942544/4411468910";
 
+    private readonly AdMobOptions? _options;
     private readonly string? _unitId;
     private bool _hasLoaded;
     private Google.MobileAds.InterstitialAd? _ad;
@@ -27,11 +28,34 @@ public sealed class InterstitialAd : IInterstitialAd
         }
     }
 
+    internal InterstitialAd(AdMobOptions options, string? unitId = null)
+    {
+        _options = options;
+        _unitId = unitId;
+        if (options.TestDeviceIds is not null)
+        {
+            MobileAds.SharedInstance.RequestConfiguration.TestDeviceIdentifiers = options.TestDeviceIds.ToArray();
+        }
+    }
+
     public void Load()
     {
-        var request = Request.GetDefaultRequest();
-        
-        Google.MobileAds.InterstitialAd.Load(string.IsNullOrWhiteSpace(_unitId) ? TestUnit : _unitId, request, AdLoaded);
+        if (_options is null)
+        {
+            var request = Request.GetDefaultRequest();
+            Google.MobileAds.InterstitialAd.Load(string.IsNullOrWhiteSpace(_unitId) ? TestUnit : _unitId, request, AdLoaded);
+            return;
+        }
+
+        if (AdMob.Current.CanShowAds)
+        {
+            var request = AdRequest.GetRequest();
+            Google.MobileAds.InterstitialAd.Load(string.IsNullOrWhiteSpace(_unitId) ? TestUnit : _unitId, request, AdLoaded);
+        }
+        else
+        {
+            OnAdFailedToLoad?.Invoke(this, new AdError("Consent has not been granted"));
+        }
     }
 
     public void Show()
