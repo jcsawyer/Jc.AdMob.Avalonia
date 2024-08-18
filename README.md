@@ -42,7 +42,7 @@ dotnet add package Jc.AdMob.Avalonia.Android
 dotnet add package Jc.AdMob.Avalonia.iOS
 ```
 
-Then you must register AdMob in the `CustomizeAppBuilder` method in `MainActivity.cs` and `AppDelete.cs` for Android and iOS respectively:
+Then you must register AdMob in the `CustomizeAppBuilder` method in `MainActivity.cs` and `AppDelegate.cs` for Android and iOS respectively:
 
 ```c#
 protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
@@ -58,6 +58,48 @@ Finally, follow the AdMob platform specific instructions in regard to configurin
 ### Test Devices
 
 To configure test devices, the `.UseAdMob()` method accepts a collection of test device ids.
+
+### Consent
+Google requires all publishers serving ads to EEA and UK users to use a Google-Certified Consent Management Platform (CMP). 
+
+Jc.AdMob.Avalonia provides a consent service using the Google User Messaging Platform (UMP) SDK. 
+
+> The addition of consent makes the previous `.UseAdMob(testDeviceIds)` obsolete and will be removed in the next major version bump.
+
+#### Usage
+To use the consent flow, you must call `.UseAdMob(AdMobOptions)` from the `MainActivity.cs` and/or `AppDelegate.cs`:
+
+```c#
+protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
+{
+    return base.CustomizeAppBuilder(builder)
+        ...
+        .UseAdMob(new AdMobOptions
+        {
+            TestDeviceIds = [],
+            TagForUnderAgeOfConsent = false,
+            TagForChildDirectedTreatment = false,
+        });
+}
+```
+
+When using the consent service, all services are accesed via the singleton `AdMob.Current`.
+
+To enable ads in regions where consent is required, you must show the consent dialog once consent is initialized:
+
+```c#
+AdMob.Current.Consent.OnConsentInitialized += (_, _) => AdMob.Current.Consent.ShowConsent();
+```
+
+#### Events
+| Event | Notes |
+|---|---|
+| OnConsentInitialized | |
+| OnConsentFailedToInitialize | |
+| OnConsentFormLoaded | iOS only - issue being investigated |
+| OnConsentFormFailedToLoad | iOS only - issue being investigated |
+| OnConsentFormFailedToPresent | |
+| OnConsentProvided | User consented and ads can be shown |
 
 ### Banners
 
@@ -111,7 +153,7 @@ The banner exposes the following events:
 |-----------------------------------|---|
 | <img alt="iOS Banner" src="img/iOS Interstitial.png" width="250" /> | <img alt="iOS Banner" src="img/Android Interstitial.jpeg" width="250" /> |
 
-Interstitial ads can be used by instantiating `InterstitialAd` in your `App` or DI container and calling `InterstitialAd.Create(unitId)`.
+Interstitial ads can be used by calling `InterstitialAd.Create(unitId)` on the `AdMob` singleton.
 
 This call will load and the return the interstitial ad with an `OnAdLoaded` event once it's finished loaded. `.Show()` can then be called to display the ad.
 
@@ -125,7 +167,7 @@ public MainViewModel()
 
 private void ShowInterstitialAd()
 {
-    var interstitial = App.InterstitialAd.Create();
+    var interstitial = AdMob.Current.Interstitial.Create();
     interstitial.OnAdLoaded += (_, _) => interstitial.Show();
 }
 ```
@@ -139,7 +181,7 @@ protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
 {
     return base.CustomizeAppBuilder(builder)
         ...
-        .UseAdMob(this);
+        .UseAdMob(this, adMobOptions);
 }
 ```
 
