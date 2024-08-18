@@ -69,8 +69,8 @@ internal sealed class AdConsentiOS : IAdConsent
                 return;
             }
 
-            OnConsentInitialized?.Invoke(this, EventArgs.Empty);
             _isInitialized = true;
+            OnConsentInitialized?.Invoke(this, EventArgs.Empty);
         });
     }
 
