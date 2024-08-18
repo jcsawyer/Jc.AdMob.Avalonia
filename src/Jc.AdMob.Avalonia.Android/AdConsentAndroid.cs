@@ -84,7 +84,9 @@ internal sealed class AdConsentAndroid : AdLoadCallback, IAdConsent, IConsentInf
         if (_consentInformation.PrivacyOptionsRequirementStatus ==
             ConsentInformationPrivacyOptionsRequirementStatus.Required)
         {
-            UserMessagingPlatform.ShowPrivacyOptionsForm(_activity, this);
+            UserMessagingPlatform.LoadAndShowConsentFormIfRequired(_activity, this);
+            // TODO investigate why this isn't working
+            //UserMessagingPlatform.LoadConsentForm(_activity, this, this);
         }
     }
 
@@ -101,6 +103,7 @@ internal sealed class AdConsentAndroid : AdLoadCallback, IAdConsent, IConsentInf
     public void OnConsentFormLoadSuccess(IConsentForm consentForm)
     {
         OnConsentFormLoaded?.Invoke(this, EventArgs.Empty);
+        UserMessagingPlatform.ShowPrivacyOptionsForm(_activity, this);
     }
 
     public void OnConsentFormDismissed(FormError? error)
