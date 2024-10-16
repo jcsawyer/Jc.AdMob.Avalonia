@@ -12,6 +12,8 @@ internal sealed class InternalAdMob : IAdMob
     
     public InterstitialAd Interstitial { get; set; }
 
+    public RewardedInterstitialAd RewardedInterstitial { get; set; }
+
     public AdMobOptions Options => _options;
 
     public bool CanShowAds => Consent.CanShowAds || Consent.CanShowPersonalizedAds;

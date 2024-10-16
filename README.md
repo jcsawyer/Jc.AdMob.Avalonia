@@ -24,7 +24,7 @@ The library currently supports the following ad units:
 
 | | Banner | Interstitial | Rewarded interstitial | Rewarded | Native advanced | App open |
 |---|---|---|---|---|---|---|
-| Android | ✓ | ✓ | ☓ | ☓ | ☓ | ☓ | ☓ |
+| Android | ✓ | ✓ | ✓ | ☓ | ☓ | ☓ | ☓ |
 | iOS | ✓ | ✓ | ☓ | ☓ | ☓ | ☓ | ☓ |
 
 ## Usage
@@ -53,16 +53,16 @@ protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
 }
 ```
 
-Finally, follow the AdMob platform specific instructions in regard to configuring the application/unit ids. 
+Finally, follow the AdMob platform specific instructions in regard to configuring the application/unit ids.
 
 ### Test Devices
 
 To configure test devices, the `.UseAdMob()` method accepts a collection of test device ids.
 
 ### Consent
-Google requires all publishers serving ads to EEA and UK users to use a Google-Certified Consent Management Platform (CMP). 
+Google requires all publishers serving ads to EEA and UK users to use a Google-Certified Consent Management Platform (CMP).
 
-Jc.AdMob.Avalonia provides a consent service using the Google User Messaging Platform (UMP) SDK. 
+Jc.AdMob.Avalonia provides a consent service using the Google User Messaging Platform (UMP) SDK.
 
 > The addition of consent makes the previous `.UseAdMob(testDeviceIds)` obsolete and will be removed in the next major version bump.
 
@@ -159,7 +159,7 @@ This call will load and the return the interstitial ad with an `OnAdLoaded` even
 
 ```c#
 public ICommand ShowInterstitialAdCommand { get; }
-    
+
 public MainViewModel()
 {
     ShowInterstitialAdCommand = ReactiveCommand.Create(ShowInterstitialAd);
@@ -169,6 +169,58 @@ private void ShowInterstitialAd()
 {
     var interstitial = AdMob.Current.Interstitial.Create();
     interstitial.OnAdLoaded += (_, _) => interstitial.Show();
+}
+```
+
+#### Android
+
+When using interstitial ads on Android, the `Activity` must be passed into the `.AddAdMob()` call:
+
+```c#
+protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
+{
+    return base.CustomizeAppBuilder(builder)
+        ...
+        .UseAdMob(this, adMobOptions);
+}
+```
+
+#### Events
+
+| Event | Notes |
+|---|---|
+| OnAdLoaded | |
+| OnAdFailedToLoad | |
+| OnAdPresented | |
+| OnAdFailedToPresent | |
+| OnAdImpression | |
+| OnAdClicked | |
+| OnAdClosed | |
+
+
+### Rewarded Interstitial
+
+| iOS                               | Android |
+|-----------------------------------|---|
+|  | <img alt="iOS Banner" src="img/Android Rewarded Interstitial.jpg" width="250" /> |
+
+Interstitial ads can be used by calling `InterstitialAd.Create(unitId)` on the `AdMob` singleton.
+
+This call will load and the return the interstitial ad with an `OnAdLoaded` event once it's finished loaded. `.Show()` can then be called to display the ad.
+
+```c#
+public ICommand ShowRewardedInterstitialAdCommand { get; }
+
+public MainViewModel()
+{
+    ShowRewardedInterstitialAdCommand = ReactiveCommand.Create(ShowRewardedInterstitialAd);
+}
+
+private void ShowRewardedInterstitialAd()
+{
+    var rewardedInterstitial = AdMob.Current.RewardedInterstitial.Create();
+    rewardedInterstitial.OnAdLoaded += (_, _) => rewardedInterstitial.Show();
+    rewardedInterstitial.OnUserEarnedReward += (_, reward) => Debug.WriteLine($"User earned reward: {reward.Amount} {reward.Type}");
 }
 ```
 
