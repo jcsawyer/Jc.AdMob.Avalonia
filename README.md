@@ -248,3 +248,13 @@ protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
 | OnAdImpression | |
 | OnAdClicked | |
 | OnAdClosed | |
+| OnUserEarnedReward | Contains a `RewardItem` record |
+
+#### RewardItem
+
+The reward item record is comprised of the following properties:
+
+| Property | Description |
+| --- | --- |
+| Amount | The amount rewarded. |
+| Type | The type of reward earned. |
