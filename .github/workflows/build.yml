@@ -24,6 +24,12 @@ jobs:
           dotnet-version: ${{ env.DOTNET_VERSION }}
       - name: Use Xcode version 16
         run: sudo xcode-select -s /Applications/Xcode_16.app/Contents/Developer
+      - name: Build iOS bindings
+        run: |
+          pushd lib/GoogleApisForiOSComponents/source/Google/MobileAds
+          dotnet workload restore
+          dotnet build -c Release
+          popd
       - name: Restore workloads
         run: dotnet workload restore
       - name: Restore dependencies
