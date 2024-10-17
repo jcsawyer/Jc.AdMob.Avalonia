@@ -1,0 +1,17 @@
+packages
+bin
+obj
+output
+tools
+tmp-nugets
+*.userprefs
+*.DS_Store
+Pods/
+build
+.vs/
+*.framework
+_._
+externals
+artifacts
+*.user
+GoogleService-Info.plist

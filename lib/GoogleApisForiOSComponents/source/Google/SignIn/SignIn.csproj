@@ -1,0 +1,77 @@
+﻿<Project Sdk="Xamarin.Legacy.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>xamarin.ios10;net6.0-ios</TargetFrameworks>
+    <NoNFloatUsing Condition="'$(TargetFramework)' == 'xamarin.ios10'">true</NoNFloatUsing>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>true</ImplicitUsings>
+    <IsBindingProject>true</IsBindingProject>
+    <NoBindingEmbedding>true</NoBindingEmbedding>
+    <SupportedOSPlatformVersion>10.0</SupportedOSPlatformVersion>
+    <RootNamespace>Google.SignIn</RootNamespace>
+    <AssemblyName>Google.SignIn</AssemblyName>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>5.0.2.4</FileVersion>
+    <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PackageId>Xamarin.Google.iOS.SignIn</PackageId>
+    <Title>Google APIs Sign In iOS Library</Title>
+    <Summary>C# bindings for Google APIs Sign In iOS Library</Summary>
+    <Description>C# bindings for Google APIs Sign In iOS Library</Description>
+    <Authors>Microsoft</Authors>
+    <Owners>Microsoft</Owners>
+    <Copyright>© Microsoft Corporation. All rights reserved.</Copyright>
+    <PackageIcon>googleiossignin_128x128.png</PackageIcon>
+    <PackageProjectUrl>https://go.microsoft.com/fwlink/?linkid=865554</PackageProjectUrl>
+    <PackageLicenseFile>License.md</PackageLicenseFile>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageVersion>5.0.2.4</PackageVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\..\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SignIn.targets" Pack="True" PackagePath="build/Xamarin.Google.iOS.SignIn.targets" />
+    <None Include="SignIn.targets" Pack="True" PackagePath="buildTransitive/Xamarin.Google.iOS.SignIn.targets" />
+    <None Include="External-Dependency-Info.txt" Pack="True" PackagePath="THIRD-PARTY-NOTICES.txt" />
+    <None Include="License.md" Pack="True" PackagePath="License.md" />
+    <None Include="../../../icons/googleiossignin_128x128.png" Pack="True" PackagePath="googleiossignin_128x128.png" />
+  </ItemGroup>
+  <!-- An iOS app project cannot find Xcframeworks within a NuGet if a TFM
+       previous than net6.0-ios is used.
+       https://github.com/xamarin/xamarin-macios/issues/13693
+       You must include the Xcframework's NativeReference tag into the iOS app
+       project so sidecar can work properly. -->
+  <!-- This workaround was designed like this to have the same
+       NativeReference tag for the iOS binding and for the .targets file -->
+  <Import Project="SignIn.targets" />
+  <ItemGroup>
+    <_NativeReference Include="..\..\..\externals\AppAuth.xcframework">
+      <_Id>$(_AppAuthId)</_Id>
+    </_NativeReference>
+    <_NativeReference Include="..\..\..\externals\GTMAppAuth.xcframework">
+      <_Id>$(_GTMAppAuthId)</_Id>
+    </_NativeReference>
+  </ItemGroup>
+  <!-- End of workaround -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'xamarin.ios10'">
+    <Compile Remove="ApiDefinition.cs" />
+    <Compile Remove="Enums.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ObjcBindingCoreSource Include="Enums.cs" Condition=" '$(EnableDefaultCompileItems)' == 'true'" />
+  </ItemGroup>
+  <ItemGroup>
+    <ObjcBindingApiDefinition Include="ApiDefinition.cs" Condition=" '$(EnableDefaultCompileItems)' == 'true'" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Xamarin.Build.Download" Version="0.11.0" PrivateAssets="None" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Firebase\Core\Core.csproj" PrivateAssets="None" />
+  </ItemGroup>
+</Project>
