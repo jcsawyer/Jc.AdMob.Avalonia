@@ -32,7 +32,7 @@ jobs:
         run: |
           pushd lib/GoogleApisForiOSComponents/source/Google/MobileAds
           dotnet workload restore
-          dotnet build -c Release -r ios-arm64
+          dotnet build -c Release
           popd
       - name: Restore workloads
         run: dotnet workload restore
