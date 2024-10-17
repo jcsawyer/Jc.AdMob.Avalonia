@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>net8.0-ios</TargetFramework>
-        <RuntimeIdentifiers>ios-arm64</RuntimeIdentifiers>
+        <RuntimeIdentifiers>ios-arm64;iossimulator-x64</RuntimeIdentifiers>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -32,7 +32,9 @@
 
     <ItemGroup>
       <Reference Include="Google.MobileAds">
-        <HintPath>..\..\lib\GoogleApisForiOSComponents\source\Google\MobileAds\bin\MobileAds\Release\net6.0-ios\Google.MobileAds.dll</HintPath>
+          <HintPath Condition="'$(RuntimeIdentifier)' != 'ios-arm64' And '$(RuntimeIdentifier)' != 'iossimulator-x64'">..\..\lib\GoogleApisForiOSComponents\source\Google\MobileAds\bin\MobileAds\Release\net6.0-ios\Google.MobileAds.dll</HintPath>
+          <HintPath Condition="'$(RuntimeIdentifier)' == 'ios-arm64'">..\..\lib\GoogleApisForiOSComponents\source\Google\MobileAds\bin\MobileAds\Release\net6.0-ios\ios-arm64\Google.MobileAds.dll</HintPath>
+          <HintPath Condition="'$(RuntimeIdentifier)' == 'iossimulator-x64'">..\..\lib\GoogleApisForiOSComponents\source\Google\MobileAds\bin\MobileAds\Release\net6.0-ios\iossimulator-x64\Google.MobileAds.dll</HintPath>
       </Reference>
     </ItemGroup>
 </Project>
