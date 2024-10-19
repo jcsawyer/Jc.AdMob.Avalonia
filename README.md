@@ -25,7 +25,7 @@ The library currently supports the following ad units:
 | | Banner | Interstitial | Rewarded interstitial | Rewarded | Native advanced | App open |
 |---|---|---|---|---|---|---|
 | Android | ✓ | ✓ | ✓ | ☓ | ☓ | ☓ | ☓ |
-| iOS | ✓ | ✓ | ☓ | ☓ | ☓ | ☓ | ☓ |
+| iOS | ✓ | ✓ | ✓ | ☓ | ☓ | ☓ | ☓ |
 
 ## Usage
 
@@ -202,7 +202,7 @@ protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
 
 | iOS                               | Android |
 |-----------------------------------|---|
-|  | <img alt="iOS Banner" src="img/Android Rewarded Interstitial.jpg" width="250" /> |
+| <img alt="iOS Banner" src="img/iOS Rewarded Interstitial.jpeg" width="250" /> | <img alt="iOS Banner" src="img/Android Rewarded Interstitial.jpg" width="250" /> |
 
 Interstitial ads can be used by calling `InterstitialAd.Create(unitId)` on the `AdMob` singleton.
 

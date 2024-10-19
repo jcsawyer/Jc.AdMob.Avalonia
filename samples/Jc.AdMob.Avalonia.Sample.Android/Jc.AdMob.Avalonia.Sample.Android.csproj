@@ -10,6 +10,7 @@
         <AndroidPackageFormat>apk</AndroidPackageFormat>
         <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
         <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+        <EmbedAssetsIntoApk>true</EmbedAssetsIntoApk>
     </PropertyGroup>
 
     <ItemGroup>
@@ -20,7 +21,7 @@
 
     <ItemGroup>
         <PackageReference Include="Avalonia.Android" Version="$(AvaloniaVersion)"/>
-        <PackageReference Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.0.1.1"/>
+        <PackageReference Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.0.1.12" />
     </ItemGroup>
 
     <ItemGroup>

@@ -2,8 +2,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jc.AdMob.Avalonia.Sample", "samples\Jc.AdMob.Avalonia.Sample\Jc.AdMob.Avalonia.Sample.csproj", "{8FCDA73C-4E66-4C88-96B0-1B5B5C2FC099}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jc.AdMob.Avalonia.Sample.Android", "samples\Jc.AdMob.Avalonia.Sample.Android\Jc.AdMob.Avalonia.Sample.Android.csproj", "{C9C76302-773D-4CC7-8159-38EC1659A60B}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jc.AdMob.Avalonia.Sample.iOS", "samples\Jc.AdMob.Avalonia.Sample.iOS\Jc.AdMob.Avalonia.Sample.iOS.csproj", "{868AE964-7656-4412-A288-CBD333ADCC44}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{13FB1068-06DC-4478-BE91-B02D9411EA51}"
@@ -13,6 +11,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jc.AdMob.Avalonia.Android", "src\Jc.AdMob.Avalonia.Android\Jc.AdMob.Avalonia.Android.csproj", "{D673A199-3993-4858-A54E-7899EB46EA5D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jc.AdMob.Avalonia.iOS", "src\Jc.AdMob.Avalonia.iOS\Jc.AdMob.Avalonia.iOS.csproj", "{5C62F856-12C7-4AC2-9558-0896B220DADC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jc.AdMob.Avalonia.Sample.Android", "samples\Jc.AdMob.Avalonia.Sample.Android\Jc.AdMob.Avalonia.Sample.Android.csproj", "{C5E61FAD-2F4F-420A-9E1A-72A6C1AB8E5C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,10 +24,6 @@ Global
 		{8FCDA73C-4E66-4C88-96B0-1B5B5C2FC099}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8FCDA73C-4E66-4C88-96B0-1B5B5C2FC099}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8FCDA73C-4E66-4C88-96B0-1B5B5C2FC099}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C9C76302-773D-4CC7-8159-38EC1659A60B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C9C76302-773D-4CC7-8159-38EC1659A60B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C9C76302-773D-4CC7-8159-38EC1659A60B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C9C76302-773D-4CC7-8159-38EC1659A60B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{868AE964-7656-4412-A288-CBD333ADCC44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{868AE964-7656-4412-A288-CBD333ADCC44}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{868AE964-7656-4412-A288-CBD333ADCC44}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -44,10 +40,14 @@ Global
 		{5C62F856-12C7-4AC2-9558-0896B220DADC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C62F856-12C7-4AC2-9558-0896B220DADC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5C62F856-12C7-4AC2-9558-0896B220DADC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5E61FAD-2F4F-420A-9E1A-72A6C1AB8E5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5E61FAD-2F4F-420A-9E1A-72A6C1AB8E5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5E61FAD-2F4F-420A-9E1A-72A6C1AB8E5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5E61FAD-2F4F-420A-9E1A-72A6C1AB8E5C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{8FCDA73C-4E66-4C88-96B0-1B5B5C2FC099} = {13FB1068-06DC-4478-BE91-B02D9411EA51}
-		{C9C76302-773D-4CC7-8159-38EC1659A60B} = {13FB1068-06DC-4478-BE91-B02D9411EA51}
 		{868AE964-7656-4412-A288-CBD333ADCC44} = {13FB1068-06DC-4478-BE91-B02D9411EA51}
+		{C5E61FAD-2F4F-420A-9E1A-72A6C1AB8E5C} = {13FB1068-06DC-4478-BE91-B02D9411EA51}
 	EndGlobalSection
 EndGlobal

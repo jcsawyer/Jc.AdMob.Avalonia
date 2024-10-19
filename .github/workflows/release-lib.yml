@@ -1,0 +1,33 @@
+on:
+  push:
+    tags:
+      - "lib-v[0-9]+.[0-9]+.[0-9]+"
+  
+env:
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+  DOTNET_NOLOGO: true
+  DOTNET_VERSION: 8.0.x
+
+jobs:
+  build:
+    runs-on: macos-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup .NET 6.0.402
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 6.0.402
+      - name: Install Cake Tool
+        run: dotnet tool install -g cake.tool --version 0.38.5
+      - name: Install cocoapods
+        run: gem install cocoapods
+      - name: Restore workloads
+        run: dotnet workload restore
+        working-directory: lib/GoogleApisForiOSComponents
+      - name: Build iOS bindings
+        run: dotnet cake
+        working-directory: lib/GoogleApisForiOSComponents
+      - name: Push
+        run: dotnet nuget push lib/GoogleApisForiOSComponents/output/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.MOBILE_ADS_NUGET_API_KEY }}
