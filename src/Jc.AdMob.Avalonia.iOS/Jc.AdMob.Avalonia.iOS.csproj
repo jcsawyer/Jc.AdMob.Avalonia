@@ -18,6 +18,7 @@
     <ItemGroup>
         <PackageReference Include="Avalonia" Version="$(AvaloniaVersion)" />
         <PackageReference Include="Avalonia.iOS" Version="$(AvaloniaVersion)" />
+        <PackageReference Include="Jc.Xamarin.Google.iOS.MobileAds" Version="8.13.0.3" />
         <PackageReference Include="MT.Xamarin.Google.iOS.UserMessagingPlatform" Version="1.1.0.4" />
     </ItemGroup>
 
@@ -28,13 +29,5 @@
     <ItemGroup>
         <None Include="..\..\LICENSE" Pack="true" PackagePath="" />
         <None Include="..\..\README.md" Pack="true" PackagePath="\" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Reference Include="Google.MobileAds">
-          <HintPath Condition="'$(RuntimeIdentifier)' != 'ios-arm64' And '$(RuntimeIdentifier)' != 'iossimulator-x64'">..\..\lib\GoogleApisForiOSComponents\source\Google\MobileAds\bin\MobileAds\Release\net6.0-ios\Google.MobileAds.dll</HintPath>
-          <HintPath Condition="'$(RuntimeIdentifier)' == 'ios-arm64'">..\..\lib\GoogleApisForiOSComponents\source\Google\MobileAds\bin\MobileAds\Release\net6.0-ios\ios-arm64\Google.MobileAds.dll</HintPath>
-          <HintPath Condition="'$(RuntimeIdentifier)' == 'iossimulator-x64'">..\..\lib\GoogleApisForiOSComponents\source\Google\MobileAds\bin\MobileAds\Release\net6.0-ios\iossimulator-x64\Google.MobileAds.dll</HintPath>
-      </Reference>
     </ItemGroup>
 </Project>
