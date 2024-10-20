@@ -13,6 +13,8 @@ internal sealed class InternalAdMob : IAdMob
     public InterstitialAd Interstitial { get; set; }
 
     public RewardedInterstitialAd RewardedInterstitial { get; set; }
+    
+    public RewardedAd Rewarded { get; set; }
 
     public AdMobOptions Options => _options;
 

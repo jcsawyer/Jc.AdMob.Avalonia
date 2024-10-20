@@ -2,7 +2,7 @@ using Android.Gms.Ads;
 
 namespace Jc.AdMob.Avalonia.Android;
 
-internal sealed class InterstitialAdListener : FullScreenContentCallback
+internal sealed class FullScreenContentCallback : global::Android.Gms.Ads.FullScreenContentCallback
 {
     public event EventHandler? AdPresented;
     public event EventHandler<global::Android.Gms.Ads.AdError>? AdFailedToPresent;

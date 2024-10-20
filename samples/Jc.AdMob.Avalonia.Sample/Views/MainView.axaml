@@ -18,6 +18,7 @@
       <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" />
       <Button Content="Show Interstitial Ad" Command="{Binding ShowInterstitialAdCommand}" HorizontalAlignment="Center"></Button>
       <Button Content="Show Rewarded Interstitial Ad" Command="{Binding ShowRewardedInterstitialAdCommand}" HorizontalAlignment="Center"></Button>
+      <Button Content="Show Rewarded Ad" Command="{Binding ShowRewardedAdCommand}" HorizontalAlignment="Center"></Button>
     </StackPanel>
       
       <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10">

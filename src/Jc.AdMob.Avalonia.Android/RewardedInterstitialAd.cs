@@ -5,7 +5,7 @@ namespace Jc.AdMob.Avalonia.Android;
 
 public sealed class RewardedInterstitialAd : IRewardedInterstitialAd
 {
-    private const string TestUnit = "ca-app-pub-9127086931863581/2976295622";
+    private const string TestUnit = "ca-app-pub-3940256099942544/5354046379";
 
     internal static Activity? Activity { get; set; }
 
@@ -77,7 +77,7 @@ public sealed class RewardedInterstitialAd : IRewardedInterstitialAd
             return;
         }
         
-        var listener = new InterstitialAdListener();
+        var listener = new FullScreenContentCallback();
         
         listener.AdPresented += (s, _) => OnAdPresented?.Invoke(s, EventArgs.Empty);
         listener.AdFailedToPresent += (s, e) => OnAdFailedToPresent?.Invoke(s, new AdError(e.Message));

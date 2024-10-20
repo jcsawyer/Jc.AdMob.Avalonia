@@ -2,15 +2,15 @@ using Google.MobileAds;
 
 namespace Jc.AdMob.Avalonia.iOS;
 
-public sealed class RewardedInterstitialAd : IRewardedInterstitialAd
+public sealed class RewardedAd : IRewardedAd
 {
-    private const string TestUnit = "ca-app-pub-3940256099942544/6978759866";
+    private const string TestUnit = "ca-app-pub-3940256099942544/1712485313";
 
     private readonly AdMobOptions? _options;
     private readonly string? _unitId;
     private bool _hasLoaded;
-    private Google.MobileAds.RewardedInterstitialAd? _ad;
-
+    private Google.MobileAds.RewardedAd? _ad;
+    
     public event EventHandler? OnAdLoaded;
     public event EventHandler<AdError>? OnAdFailedToLoad;
     public event EventHandler? OnAdPresented;
@@ -20,7 +20,7 @@ public sealed class RewardedInterstitialAd : IRewardedInterstitialAd
     public event EventHandler? OnAdClosed;
     public event EventHandler<RewardItem>? OnUserEarnedReward;
     
-    public RewardedInterstitialAd(string? unitId = null, IReadOnlyCollection<string>? testDeviceIds = null)
+    public RewardedAd(string? unitId = null, IReadOnlyCollection<string>? testDeviceIds = null)
     {
         _unitId = unitId;
         if (testDeviceIds is not null)
@@ -29,7 +29,7 @@ public sealed class RewardedInterstitialAd : IRewardedInterstitialAd
         }
     }
     
-    internal RewardedInterstitialAd(AdMobOptions options, string? unitId = null)
+    public RewardedAd(AdMobOptions options, string? unitId = null)
     {
         _options = options;
         _unitId = unitId;
@@ -44,14 +44,14 @@ public sealed class RewardedInterstitialAd : IRewardedInterstitialAd
         if (_options is null)
         {
             var request = Request.GetDefaultRequest();
-            Google.MobileAds.RewardedInterstitialAd.Load(string.IsNullOrWhiteSpace(_unitId) ? TestUnit : _unitId, request, AdLoaded);
+            Google.MobileAds.RewardedAd.Load(string.IsNullOrWhiteSpace(_unitId) ? TestUnit : _unitId, request, AdLoaded);
             return;
         }
 
         if (AdMob.Current.CanShowAds)
         {
             var request = AdRequest.GetRequest();
-            Google.MobileAds.RewardedInterstitialAd.Load(string.IsNullOrWhiteSpace(_unitId) ? TestUnit : _unitId, request, AdLoaded);
+            Google.MobileAds.RewardedAd.Load(string.IsNullOrWhiteSpace(_unitId) ? TestUnit : _unitId, request, AdLoaded);
         }
         else
         {
@@ -68,10 +68,10 @@ public sealed class RewardedInterstitialAd : IRewardedInterstitialAd
         
         var viewController = UIApplication.SharedApplication.KeyWindow.RootViewController;
 
-        _ad.Present(viewController, () => OnUserEarnedReward?.Invoke(this, new RewardItem(_ad.Reward.Amount.Int32Value, _ad.Reward.Type)));
+        _ad.Present(viewController, () => OnUserEarnedReward?.Invoke(this, new RewardItem(_ad.AdReward.Amount.Int32Value, _ad.AdReward.Type)));
     }
-
-    private void AdLoaded(Google.MobileAds.RewardedInterstitialAd? rewardedInterstitialAd, NSError? error)
+    
+    private void AdLoaded(Google.MobileAds.RewardedAd? rewardedAd, NSError? error)
     {
         if (error is not null)
         {
@@ -79,20 +79,18 @@ public sealed class RewardedInterstitialAd : IRewardedInterstitialAd
             return;
         }
 
-        if (rewardedInterstitialAd is null)
+        if (rewardedAd is null)
         {
             return;
         }
         
-        _ad = rewardedInterstitialAd;
+        _ad = rewardedAd;
 
-        var callbacks = new FullScreenContentCallback();
-        callbacks.PresentedContent += (s, e) => OnAdPresented?.Invoke(s, e);
-        callbacks.FailedToPresentContent += (s, e) => OnAdFailedToPresent?.Invoke(s, new AdError(e.DebugDescription));
-        callbacks.RecordedImpression += (s, e) => OnAdImpression?.Invoke(s, e);
-        callbacks.RecordedClick += (s, e) => OnAdClicked?.Invoke(s, e);
-        callbacks.DismissedContent += (s, e) => OnAdClosed?.Invoke(s, e);
-        _ad.FullScreenContentDelegate = callbacks;
+        _ad.PresentedContent += (s, e) => OnAdPresented?.Invoke(s, e);
+        _ad.FailedToPresentContent += (s, e) => OnAdFailedToPresent?.Invoke(s, new AdError(e.Error.DebugDescription));
+        _ad.RecordedImpression += (s, e) => OnAdImpression?.Invoke(s, e);
+        _ad.RecordedClick += (s, e) => OnAdClicked?.Invoke(s, e);
+        _ad.DismissedContent += (s, e) => OnAdClosed?.Invoke(s, e);
 
         _hasLoaded = true;
         OnAdLoaded?.Invoke(this, EventArgs.Empty);

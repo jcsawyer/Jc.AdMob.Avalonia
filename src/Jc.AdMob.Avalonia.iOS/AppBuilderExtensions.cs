@@ -15,6 +15,7 @@ public static class AppBuilderExtensions
             BannerAd.Implementation = new BannerAdiOS(testDeviceIds);
             Avalonia.InterstitialAd.ImplementationFactory = unitId => new InterstitialAd(unitId, testDeviceIds);
             Avalonia.RewardedInterstitialAd.ImplementationFactory = unitId => new RewardedInterstitialAd(unitId, testDeviceIds);
+            Avalonia.RewardedAd.ImplementationFactory = unitId => new RewardedAd(unitId, testDeviceIds);
         });
     }
 
@@ -25,9 +26,11 @@ public static class AppBuilderExtensions
             AdMob.Current.Consent = new AdConsentiOS(options);
             AdMob.Current.Interstitial = new Avalonia.InterstitialAd();
             AdMob.Current.RewardedInterstitial = new Avalonia.RewardedInterstitialAd();
+            AdMob.Current.Rewarded = new Avalonia.RewardedAd();
 
             Avalonia.InterstitialAd.ImplementationFactory = unitId => new InterstitialAd(options, unitId);
             Avalonia.RewardedInterstitialAd.ImplementationFactory = unitId => new RewardedInterstitialAd(options, unitId);
+            Avalonia.RewardedAd.ImplementationFactory = unitId => new RewardedAd(options, unitId);
             BannerAd.Implementation = new BannerAdiOS(options);
             
             AdMob.Current.Initialize(options);

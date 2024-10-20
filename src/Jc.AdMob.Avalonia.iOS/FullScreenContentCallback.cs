@@ -2,7 +2,7 @@ using Google.MobileAds;
 
 namespace Jc.AdMob.Avalonia.iOS;
 
-internal sealed class RewardedInterstitialAdCallbacks : FullScreenContentDelegate
+internal sealed class FullScreenContentCallback : FullScreenContentDelegate
 {
     public event EventHandler? PresentedContent; 
     public event EventHandler<NSError>? FailedToPresentContent;

@@ -14,6 +14,7 @@ public class MainViewModel : ViewModelBase
     public ICommand ShowConsentCommand { get; }
     public ICommand ShowInterstitialAdCommand { get; }
     public ICommand ShowRewardedInterstitialAdCommand { get; }
+    public ICommand ShowRewardedAdCommand { get; }
     
     public MainViewModel()
     {
@@ -21,6 +22,7 @@ public class MainViewModel : ViewModelBase
         ShowConsentCommand = ReactiveCommand.Create(ShowConsent);
         ShowInterstitialAdCommand = ReactiveCommand.Create(ShowInterstitialAd);
         ShowRewardedInterstitialAdCommand = ReactiveCommand.Create(ShowRewardedInterstitialAd);
+        ShowRewardedAdCommand = ReactiveCommand.Create(ShowRewardedAd);
     }
 
     private void ResetConsent()
@@ -44,5 +46,12 @@ public class MainViewModel : ViewModelBase
         var rewardedInterstitial = AdMob.Current.RewardedInterstitial.Create();
         rewardedInterstitial.OnAdLoaded += (_, _) => rewardedInterstitial.Show();
         rewardedInterstitial.OnUserEarnedReward += (_, reward) => Debug.WriteLine($"User earned reward: {reward.Amount} {reward.Type}");
+    }
+    
+    private void ShowRewardedAd()
+    {
+        var rewarded = AdMob.Current.Rewarded.Create();
+        rewarded.OnAdLoaded += (_, _) => rewarded.Show();
+        rewarded.OnUserEarnedReward += (_, reward) => Debug.WriteLine($"User earned reward: {reward.Amount} {reward.Type}");
     }
 }

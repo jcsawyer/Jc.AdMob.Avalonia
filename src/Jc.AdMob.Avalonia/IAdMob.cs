@@ -9,6 +9,7 @@ public interface IAdMob
     IAdConsent Consent { get; internal set; }
     InterstitialAd Interstitial { get; internal set; }
     RewardedInterstitialAd RewardedInterstitial { get; internal set; }
+    RewardedAd Rewarded { get; internal set; }
     
     AdMobOptions Options { get; }
     
