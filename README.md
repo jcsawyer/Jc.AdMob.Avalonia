@@ -22,10 +22,10 @@ Jc.AdMob.Avalonia is a library to bring [Google AdMob](https://developers.google
 
 The library currently supports the following ad units:
 
-| | Banner | Interstitial | Rewarded interstitial | Rewarded | Native advanced | App open |
-|---|---|---|---|---|---|---|
-| Android | ✓ | ✓ | ✓ | ☓ | ☓ | ☓ | ☓ |
-| iOS | ✓ | ✓ | ✓ | ☓ | ☓ | ☓ | ☓ |
+| | Consent | Banner | Interstitial | Rewarded interstitial | Rewarded | Native advanced | App open |
+|---|---|---|---|---|---|---|---|
+| Android | ✓ | ✓ | ✓ | ✓ | ✓ | ☓ | ☓ | ☓ |
+| iOS | ✓ | ✓ | ✓ | ✓ | ✓ | ☓ | ☓ | ☓ |
 
 ## Usage
 
@@ -153,7 +153,7 @@ The banner exposes the following events:
 |-----------------------------------|---|
 | <img alt="iOS Banner" src="img/iOS Interstitial.png" width="250" /> | <img alt="iOS Banner" src="img/Android Interstitial.jpeg" width="250" /> |
 
-Interstitial ads can be used by calling `InterstitialAd.Create(unitId)` on the `AdMob` singleton.
+Interstitial ads can be used by calling `Interstitial.Create(unitId)` on the `AdMob` singleton.
 
 This call will load and the return the interstitial ad with an `OnAdLoaded` event once it's finished loaded. `.Show()` can then be called to display the ad.
 
@@ -204,9 +204,11 @@ protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
 |-----------------------------------|---|
 | <img alt="iOS Banner" src="img/iOS Rewarded Interstitial.jpeg" width="250" /> | <img alt="iOS Banner" src="img/Android Rewarded Interstitial.jpg" width="250" /> |
 
-Interstitial ads can be used by calling `InterstitialAd.Create(unitId)` on the `AdMob` singleton.
+Interstitial ads can be used by calling `RewardedInterstitial.Create(unitId)` on the `AdMob` singleton.
 
 This call will load and the return the interstitial ad with an `OnAdLoaded` event once it's finished loaded. `.Show()` can then be called to display the ad.
+
+The reward event `OnUserEarnedReward` can then be used to know when a reward can be given to the user.
 
 ```c#
 public ICommand ShowRewardedInterstitialAdCommand { get; }
@@ -258,3 +260,57 @@ The reward item record is comprised of the following properties:
 | --- | --- |
 | Amount | The amount rewarded. |
 | Type | The type of reward earned. |
+
+### Rewarded
+
+| iOS                               | Android |
+|-----------------------------------|---|
+| <img alt="iOS Banner" src="img/iOS Rewarded Interstitial.jpeg" width="250" /> | <img alt="iOS Banner" src="img/Android Rewarded Interstitial.jpg" width="250" /> |
+
+Interstitial ads can be used by calling `Rewarded.Create(unitId)` on the `AdMob` singleton.
+
+This call will load and the return the interstitial ad with an `OnAdLoaded` event once it's finished loaded. `.Show()` can then be called to display the ad.
+
+The reward event `OnUserEarnedReward` can then be used to know when a reward can be given to the user.
+
+```c#
+public ICommand ShowRewardedAdCommand { get; }
+
+public MainViewModel()
+{
+    ShowRewardedAdCommand = ReactiveCommand.Create(ShowRewardedAd);
+}
+
+private void ShowRewardedAd()
+{
+    var rewarded = AdMob.Current.Rewarded.Create();
+    rewarded.OnAdLoaded += (_, _) => rewarded.Show();
+    rewarded.OnUserEarnedReward += (_, reward) => Debug.WriteLine($"User earned reward: {reward.Amount} {reward.Type}");
+}
+```
+
+#### Android
+
+When using rewarded ads on Android, the `Activity` must be passed into the `.AddAdMob()` call:
+
+```c#
+protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
+{
+    return base.CustomizeAppBuilder(builder)
+        ...
+        .UseAdMob(this, adMobOptions);
+}
+```
+
+#### Events
+
+| Event | Notes |
+|---|---|
+| OnAdLoaded | |
+| OnAdFailedToLoad | |
+| OnAdPresented | |
+| OnAdFailedToPresent | |
+| OnAdImpression | |
+| OnAdClicked | |
+| OnAdClosed | |
+| OnUserEarnedReward | Contains a `RewardItem` record |
