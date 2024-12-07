@@ -25,6 +25,10 @@ jobs:
         run: dotnet workload restore
       - name: Set VERSION variable from tag
         run: echo "VERSION=${GITHUB_REF/refs\/tags\/v/}" >> $GITHUB_ENV
+      - name: Build
+        run: dotnet build jc-admob-avalonia.sln --configuration Release /p:Version=${VERSION}
+      - name: Test
+        run: dotnet test jc-admob-avalonia.sln --configuration Release /p:Version=${VERSION} --no-build
       - name: Pack
         run: dotnet pack jc-admob-avalonia.sln --configuration Release /p:Version=${VERSION} --output .
       - name: Push
