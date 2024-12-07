@@ -203,7 +203,7 @@
 				"Type": "Pod",
 				"Pod": {
 					"Name": "GoogleUserMessagingPlatform",
-					"Version": "1.1.0"
+					"Version": "2.7.0"
 				}
 			}
 		},
