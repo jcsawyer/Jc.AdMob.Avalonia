@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFramework>net9.0-ios</TargetFramework>
+		<TargetFramework>net8.0-ios</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>true</ImplicitUsings>
 		<IsBindingProject>true</IsBindingProject>
@@ -18,7 +18,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<NativeReference Include="native/GoogleMobileAds.xcframework">
+		<NativeReference Include="GoogleMobileAds.xcframework">
 			<Kind>Framework</Kind>
 			<SmartLink>True</SmartLink>
 			<ForceLoad>True</ForceLoad>
