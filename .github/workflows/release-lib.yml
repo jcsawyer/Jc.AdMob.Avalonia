@@ -30,4 +30,4 @@ jobs:
         run: dotnet cake
         working-directory: lib/GoogleApisForiOSComponents
       - name: Push
-        run: dotnet nuget push lib/GoogleApisForiOSComponents/output/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.MOBILE_ADS_NUGET_API_KEY }}
+        run: dotnet nuget push lib/GoogleApisForiOSComponents/output/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.MOBILE_ADS_NUGET_API_KEY }} --skip-duplicate

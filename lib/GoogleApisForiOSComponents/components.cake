@@ -1,19 +1,26 @@
 // Firebase artifacts available to be built. These artifacts generate NuGets.
 Artifact GOOGLE_MOBILE_ADS_ARTIFACT   = new Artifact ("Google.MobileAds",             "8.13.0.3", "11.0", ComponentGroup.Google, csprojName: "MobileAds");
+Artifact GOOGLE_UMP_ARTIFACT		  = new Artifact ("Google.UserMessagingPlatform", "1.1.0.1", "11.0", ComponentGroup.Google, csprojName: "UserMessagingPlatform");
 
 var ARTIFACTS = new Dictionary<string, Artifact> {
 	{ "Google.MobileAds",             GOOGLE_MOBILE_ADS_ARTIFACT },
+	{ "Google.UserMessagingPlatform", GOOGLE_UMP_ARTIFACT },
 };
 
 void SetArtifactsDependencies ()
 {
 	GOOGLE_MOBILE_ADS_ARTIFACT.Dependencies   = null;
+	GOOGLE_UMP_ARTIFACT.Dependencies		  = null;
 }
 
 void SetArtifactsPodSpecs ()
 {
 	GOOGLE_MOBILE_ADS_ARTIFACT.PodSpecs = new [] {
 		PodSpec.Create ("Google-Mobile-Ads-SDK", "23.4.0")
+	};
+	
+	GOOGLE_UMP_ARTIFACT.PodSpecs = new [] {
+		PodSpec.Create ("GoogleUserMessagingPlatform", "2.7.0")
 	};
 }
 
