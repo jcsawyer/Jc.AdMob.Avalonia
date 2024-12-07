@@ -4,6 +4,9 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>true</ImplicitUsings>
 		<IsBindingProject>true</IsBindingProject>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+
+		<VersionPrefix>1.0.1</VersionPrefix>
 
 		<!--
       Enable trim analyzers for class libraries.
