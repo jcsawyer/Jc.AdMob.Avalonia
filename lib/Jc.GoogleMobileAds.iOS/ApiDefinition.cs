@@ -19,45 +19,7 @@ namespace Google.MobileAds
     [Static]
     interface AdSizeCons
     {
-        [Internal]
-        [Field("GADAdSizeBanner", "__Internal")]
-        IntPtr _Banner { get; }
-
-        [Internal]
-        [Field("GADAdSizeLargeBanner", "__Internal")]
-        IntPtr _LargeBanner { get; }
-
-        [Internal]
-        [Field("GADAdSizeMediumRectangle", "__Internal")]
-        IntPtr _MediumRectangle { get; }
-
-        [Internal]
-        [Field("GADAdSizeFullBanner", "__Internal")]
-        IntPtr _FullBanner { get; }
-
-        [Internal]
-        [Field("GADAdSizeLeaderboard", "__Internal")]
-        IntPtr _Leaderboard { get; }
-
-        [Internal]
-        [Field("GADAdSizeSkyscraper", "__Internal")]
-        IntPtr _Skyscraper { get; }
-
-        [Internal]
-        [Field("kGADAdSizeSmartBannerPortrait", "__Internal")]
-        IntPtr _SmartBannerPortrait { get; }
-
-        [Internal]
-        [Field("kGADAdSizeSmartBannerLandscape", "__Internal")]
-        IntPtr _SmartBannerLandscape { get; }
-
-        [Internal]
-        [Field("GADAdSizeFluid", "__Internal")]
-        IntPtr _Fluid { get; }
-
-        [Internal]
-        [Field("GADAdSizeInvalid", "__Internal")]
-        IntPtr _Invalid { get; }
+        
     }
     #endregion
 
@@ -513,12 +475,12 @@ namespace Google.MobileAds
         NSString GoogleAdNetworkClassName { get; }
 
         // extern NSString *const _Nonnull GADCustomEventAdNetworkClassName;
-        [Field("GADCustomEventAdNetworkClassName", "__Internal")]
-        NSString CustomEventAdNetworkClassName { get; }
+        //[Field("GADCustomEventAdNetworkClassName", "__Internal")]
+        //NSString CustomEventAdNetworkClassName { get; }
 
         // extern NSString * _Nonnull GADErrorUserInfoKeyResponseInfo;
-        [Field("GADErrorUserInfoKeyResponseInfo", "__Internal")]
-        NSString ErrorUserInfoKey { get; }
+        //[Field("GADErrorUserInfoKeyResponseInfo", "__Internal")]
+        //NSString ErrorUserInfoKey { get; }
 
         // @property (readonly, nonatomic) NSString * _Nullable responseIdentifier;
         [NullAllowed]
@@ -1133,9 +1095,9 @@ namespace Google.MobileAds
     interface CustomNativeAd
     {
         // extern NSString *const GADCustomTemplateAdMediaViewKey;
-        [Internal]
-        [Field("GADCustomNativeAdMediaViewKey", "__Internal")]
-        NSString _MediaViewKey { get; }
+        //[Internal]
+        //[Field("GADCustomNativeAdMediaViewKey", "__Internal")]
+        //NSString _MediaViewKey { get; }
 
         // @property(nonatomic, readonly, nonnull) NSString *formatID;
         [Export("formatID")]
