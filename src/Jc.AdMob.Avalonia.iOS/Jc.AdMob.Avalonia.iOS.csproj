@@ -19,7 +19,7 @@
         <PackageReference Include="Avalonia" Version="$(AvaloniaVersion)" />
         <PackageReference Include="Avalonia.iOS" Version="$(AvaloniaVersion)" />
         <PackageReference Include="Jc.Xamarin.Google.iOS.MobileAds" Version="8.13.0.3" />
-        <PackageReference Include="MT.Xamarin.Google.iOS.UserMessagingPlatform" Version="1.1.0.4" />
+        <PackageReference Include="Jc.Xamarin.Google.iOS.UserMessagingPlatform" Version="1.1.0.1" />
     </ItemGroup>
 
     <ItemGroup>
