@@ -424,20 +424,20 @@ namespace Google.MobileAds {
 	interface MaxAdContentRatingConstants
 	{
 		// GAD_EXTERN GADMaxAdContentRating _Nonnull const GADMaxAdContentRatingGeneral;
-		[Field("GADMaxAdContentRatingGeneral", "__Internal")]
-		NSString General { get; }
+		//[Field("GADMaxAdContentRatingGeneral", "__Internal")]
+		//NSString General { get; }
 
 		// GAD_EXTERN GADMaxAdContentRating _Nonnull const GADMaxAdContentRatingParentalGuidance;
-		[Field("GADMaxAdContentRatingParentalGuidance", "__Internal")]
-		NSString ParentalGuidance { get; }
+		//[Field("GADMaxAdContentRatingParentalGuidance", "__Internal")]
+		//NSString ParentalGuidance { get; }
 
 		// GAD_EXTERN GADMaxAdContentRating _Nonnull const GADMaxAdContentRatingTeen;
-		[Field("GADMaxAdContentRatingTeen", "__Internal")]
-		NSString Teen { get; }
+		//[Field("GADMaxAdContentRatingTeen", "__Internal")]
+		//NSString Teen { get; }
 
 		// GAD_EXTERN GADMaxAdContentRating _Nonnull const GADMaxAdContentRatingMatureAudience;
-		[Field("GADMaxAdContentRatingMatureAudience", "__Internal")]
-		NSString MatureAudience { get; }
+		//[Field("GADMaxAdContentRatingMatureAudience", "__Internal")]
+		//NSString MatureAudience { get; }
 	}
 
 	// @interface GADRequestConfiguration : NSObject
@@ -501,8 +501,8 @@ namespace Google.MobileAds {
 	interface ResponseInfo
 	{
 		// extern NSString *const _Nonnull GADGoogleAdNetworkClassName;
-		[Field ("GADGoogleAdNetworkClassName", "__Internal")]
-		NSString GoogleAdNetworkClassName { get; }
+		//[Field ("GADGoogleAdNetworkClassName", "__Internal")]
+		//NSString GoogleAdNetworkClassName { get; }
 
 		// extern NSString *const _Nonnull GADCustomEventAdNetworkClassName;
 		[Field ("GADCustomEventAdNetworkClassName", "__Internal")]
@@ -1081,20 +1081,20 @@ namespace Google.MobileAds {
 	[Static]
 	interface NativeAdAssetIdentifiers {
 		// extern const GADNativeAssetIdentifier _Nonnull GADNativeHeadlineAsset __attribute__((visibility("default")));
-		[Field ("GADNativeHeadlineAsset", "__Internal")]
-		NSString HeadlineAsset { get; }
+		//[Field ("GADNativeHeadlineAsset", "__Internal")]
+		//NSString HeadlineAsset { get; }
 
 		// extern const GADNativeAssetIdentifier _Nonnull GADNativeCallToActionAsset __attribute__((visibility("default")));
-		[Field ("GADNativeCallToActionAsset", "__Internal")]
-		NSString CallToActionAsset { get; }
+		//[Field ("GADNativeCallToActionAsset", "__Internal")]
+		//NSString CallToActionAsset { get; }
 
 		// extern const GADNativeAssetIdentifier _Nonnull GADNativeIconAsset __attribute__((visibility("default")));
-		[Field ("GADNativeIconAsset", "__Internal")]
-		NSString IconAsset { get; }
+		//[Field ("GADNativeIconAsset", "__Internal")]
+		//NSString IconAsset { get; }
 
 		// extern const GADNativeAssetIdentifier _Nonnull GADNativeBodyAsset __attribute__((visibility("default")));
-		[Field ("GADNativeBodyAsset", "__Internal")]
-		NSString BodyAsset { get; }
+		//[Field ("GADNativeBodyAsset", "__Internal")]
+		//NSString BodyAsset { get; }
 
 		// extern const GADNativeAssetIdentifier _Nonnull GADNativeStoreAsset __attribute__((visibility("default")));
 		[Field ("GADNativeStoreAsset", "__Internal")]
@@ -1113,16 +1113,16 @@ namespace Google.MobileAds {
 		NSString StarRatingAsset { get; }
 
 		// extern const GADNativeAssetIdentifier _Nonnull GADNativeAdvertiserAsset __attribute__((visibility("default")));
-		[Field ("GADNativeAdvertiserAsset", "__Internal")]
-		NSString AdvertiserAsset { get; }
+		//[Field ("GADNativeAdvertiserAsset", "__Internal")]
+		//NSString AdvertiserAsset { get; }
 
 		// extern const GADNativeAssetIdentifier _Nonnull GADNativeMediaViewAsset __attribute__((visibility("default")));
 		[Field ("GADNativeMediaViewAsset", "__Internal")]
 		NSString MediaViewAsset { get; }
 
 		// extern const GADNativeAssetIdentifier _Nonnull GADNativeAdChoicesViewAsset __attribute__((visibility("default")));
-		[Field ("GADNativeAdChoicesViewAsset", "__Internal")]
-		NSString AdChoicesViewAsset { get; }
+		//[Field ("GADNativeAdChoicesViewAsset", "__Internal")]
+		//NSString AdChoicesViewAsset { get; }
 	}
 
 	// typedef void (^GADNativeAdCustomClickHandler)(NSString* assetID);
