@@ -35,7 +35,9 @@ internal sealed class BannerAdiOS : INativeBannerAd
             AdSize.Leaderboard => GetSize(728, 90),
             AdSize.MediumRectangle => GetSize(300, 250),
             AdSize.WideSkyscraper => GetSize(160, 600),
-            _ => AdSizeCons.GetCurrentOrientationAnchoredAdaptiveBannerAdSize(UIScreen.MainScreen.Bounds.Width)
+            //_ => AdSizeCons.GetCurrentOrientationAnchoredAdaptiveBannerAdSize(UIScreen.MainScreen.Bounds.Width)
+            // TODO figure out some way to do this nicely or fix the binding
+            _ => GetSize((int)UIScreen.MainScreen.Bounds.Width.Value, 100),
         };
 
         var adView = new BannerView()

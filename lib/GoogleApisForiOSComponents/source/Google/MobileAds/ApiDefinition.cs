@@ -15,8 +15,7 @@ namespace Google.MobileAds {
 	#region CustomLib
 	// This is a custom class created by me and is not part of Google Admob lib
 	// But it is necesary for this binding to work
-	[Static]
-	interface AdSizeCons {
+	/*interface AdSizeCons {
 		[Internal]
 		[Field ("GADAdSizeBanner", "__Internal")]
 		IntPtr _Banner { get; }
@@ -56,7 +55,7 @@ namespace Google.MobileAds {
 		[Internal]
 		[Field ("GADAdSizeInvalid", "__Internal")]
 		IntPtr _Invalid { get; }
-	}
+	}*/
 	#endregion
 
 	// typedef void (^GADInitializationCompletionHandler)(GADInitializationStatus * _Nonnull);
