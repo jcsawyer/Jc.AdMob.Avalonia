@@ -383,8 +383,8 @@ namespace Google.MobileAds {
 	[DisableDefaultCtor]
 	[BaseType (typeof (NSObject), Name = "GADRequest")]
 	interface Request : INSCopying {
-		[Field ("GADSimulatorID", "__Internal")]
-		NSString SimulatorId { get; }
+		//[Field ("GADSimulatorID", "__Internal")]
+		//NSString SimulatorId { get; }
 
 		[Static]
 		[Export ("request")]
@@ -504,12 +504,12 @@ namespace Google.MobileAds {
 		//NSString GoogleAdNetworkClassName { get; }
 
 		// extern NSString *const _Nonnull GADCustomEventAdNetworkClassName;
-		[Field ("GADCustomEventAdNetworkClassName", "__Internal")]
-		NSString CustomEventAdNetworkClassName { get; }
+		//[Field ("GADCustomEventAdNetworkClassName", "__Internal")]
+		//NSString CustomEventAdNetworkClassName { get; }
 
 		// extern NSString * _Nonnull GADErrorUserInfoKeyResponseInfo;
-		[Field ("GADErrorUserInfoKeyResponseInfo", "__Internal")]
-		NSString ErrorUserInfoKey { get; }
+		//[Field ("GADErrorUserInfoKeyResponseInfo", "__Internal")]
+		//NSString ErrorUserInfoKey { get; }
 
 		// @property (readonly, nonatomic) NSString * _Nullable responseIdentifier;
 		[NullAllowed]
@@ -1096,28 +1096,28 @@ namespace Google.MobileAds {
 		//NSString BodyAsset { get; }
 
 		// extern const GADNativeAssetIdentifier _Nonnull GADNativeStoreAsset __attribute__((visibility("default")));
-		[Field ("GADNativeStoreAsset", "__Internal")]
-		NSString StoreAsset { get; }
+		//[Field ("GADNativeStoreAsset", "__Internal")]
+		//NSString StoreAsset { get; }
 
 		// extern const GADNativeAssetIdentifier _Nonnull GADNativePriceAsset __attribute__((visibility("default")));
-		[Field ("GADNativePriceAsset", "__Internal")]
-		NSString PriceAsset { get; }
+		//[Field ("GADNativePriceAsset", "__Internal")]
+		//NSString PriceAsset { get; }
 
 		// extern const GADNativeAssetIdentifier _Nonnull GADNativeImageAsset __attribute__((visibility("default")));
-		[Field ("GADNativeImageAsset", "__Internal")]
-		NSString ImageAsset { get; }
+		//[Field ("GADNativeImageAsset", "__Internal")]
+		//NSString ImageAsset { get; }
 
 		// extern const GADNativeAssetIdentifier _Nonnull GADNativeStarRatingAsset __attribute__((visibility("default")));
-		[Field ("GADNativeStarRatingAsset", "__Internal")]
-		NSString StarRatingAsset { get; }
+		//[Field ("GADNativeStarRatingAsset", "__Internal")]
+		//NSString StarRatingAsset { get; }
 
 		// extern const GADNativeAssetIdentifier _Nonnull GADNativeAdvertiserAsset __attribute__((visibility("default")));
 		//[Field ("GADNativeAdvertiserAsset", "__Internal")]
 		//NSString AdvertiserAsset { get; }
 
 		// extern const GADNativeAssetIdentifier _Nonnull GADNativeMediaViewAsset __attribute__((visibility("default")));
-		[Field ("GADNativeMediaViewAsset", "__Internal")]
-		NSString MediaViewAsset { get; }
+		//[Field ("GADNativeMediaViewAsset", "__Internal")]
+		//NSString MediaViewAsset { get; }
 
 		// extern const GADNativeAssetIdentifier _Nonnull GADNativeAdChoicesViewAsset __attribute__((visibility("default")));
 		//[Field ("GADNativeAdChoicesViewAsset", "__Internal")]
@@ -1131,9 +1131,9 @@ namespace Google.MobileAds {
 	[BaseType (typeof (UIView), Name = "GADCustomNativeAd")]
 	interface CustomNativeAd {
 		// extern NSString *const GADCustomTemplateAdMediaViewKey;
-		[Internal]
-		[Field ("GADCustomNativeAdMediaViewKey", "__Internal")]
-		NSString _MediaViewKey { get; }
+		//[Internal]
+		//[Field ("GADCustomNativeAdMediaViewKey", "__Internal")]
+		//NSString _MediaViewKey { get; }
 
 		// @property(nonatomic, readonly, nonnull) NSString *formatID;
 		[Export ("formatID")]
@@ -2214,9 +2214,9 @@ namespace Google.MobileAds.DoubleClick {
 
 	[BaseType (typeof (Google.MobileAds.Request), Name = "GAMRequest")]
 	interface Request {
-		[New]
-		[Field ("GADSimulatorID", "__Internal")]
-		NSString SimulatorId { get; }
+		//[New]
+		//[Field ("GADSimulatorID", "__Internal")]
+		//NSString SimulatorId { get; }
 
 		[New]
 		[Static]

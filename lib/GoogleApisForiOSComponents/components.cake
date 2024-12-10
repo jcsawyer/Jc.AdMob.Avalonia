@@ -1,5 +1,5 @@
 // Firebase artifacts available to be built. These artifacts generate NuGets.
-Artifact GOOGLE_MOBILE_ADS_ARTIFACT   = new Artifact ("Google.MobileAds",             "10.0.0-preview200", "11.0", ComponentGroup.Google, csprojName: "MobileAds");
+Artifact GOOGLE_MOBILE_ADS_ARTIFACT   = new Artifact ("Google.MobileAds",             "10.0.0-preview300", "11.0", ComponentGroup.Google, csprojName: "MobileAds");
 Artifact GOOGLE_UMP_ARTIFACT		  = new Artifact ("Google.UserMessagingPlatform", "1.1.0.1", "11.0", ComponentGroup.Google, csprojName: "UserMessagingPlatform");
 
 var ARTIFACTS = new Dictionary<string, Artifact> {

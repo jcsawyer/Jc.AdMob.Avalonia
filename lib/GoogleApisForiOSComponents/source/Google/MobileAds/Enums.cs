@@ -21,16 +21,16 @@ namespace Google.MobileAds
 	public enum AdLoaderAdType
 	{
 		// extern NSString *const GADAdLoaderAdTypeCustomNative;
-		[Field ("GADAdLoaderAdTypeCustomNative", "__Internal")]
-		CustomNative,
+		//[Field ("GADAdLoaderAdTypeCustomNative", "__Internal")]
+		//CustomNative,
 
 		// extern NSString *const GADAdLoaderAdTypeGAMBanner;
-		[Field ("GADAdLoaderAdTypeGAMBanner", "__Internal")]
-		GamBanner,
+		//[Field ("GADAdLoaderAdTypeGAMBanner", "__Internal")]
+		//GamBanner,
 
 		// extern NSString *const GADAdLoaderAdTypeNative;
-		[Field ("GADAdLoaderAdTypeNative", "__Internal")]
-		Native
+		//[Field ("GADAdLoaderAdTypeNative", "__Internal")]
+		//Native
 	}
 
 	[Native]
