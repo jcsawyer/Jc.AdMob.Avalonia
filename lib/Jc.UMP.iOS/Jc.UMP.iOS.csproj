@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net8.0-ios</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>true</ImplicitUsings>
+        <IsBindingProject>true</IsBindingProject>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <RuntimeIdentifiers>osx-x64;osx-arm64</RuntimeIdentifiers>
+        <IsTrimmable>true</IsTrimmable>
+        <Title>Jc User Messaging Platform iOS Bindings</Title>
+        <Authors>Joseph Sawyer</Authors>
+        <Copyright>Joseph Sawyer</Copyright>
+        <Description>User Messaging Platform iOS Bindings.</Description>
+        <PackageProjectUrl>https://jcsawyer.com/</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/jcsawyer/Jc.AdMob.Avalonia/tree/main</RepositoryUrl>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ObjcBindingApiDefinition Include="ApiDefinition.cs"/>
+        <ObjcBindingCoreSource Include="StructsAndEnums.cs"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <NativeReference Include="UMP.xcframework">
+            <Kind>Framework</Kind>
+            <SmartLink>True</SmartLink>
+            <ForceLoad>True</ForceLoad>
+        </NativeReference>
+    </ItemGroup>
+</Project>

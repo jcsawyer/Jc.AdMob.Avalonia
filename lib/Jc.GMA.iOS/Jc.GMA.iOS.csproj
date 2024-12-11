@@ -6,8 +6,13 @@
 		<IsBindingProject>true</IsBindingProject>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<RuntimeIdentifiers>osx-x64;osx-arm64</RuntimeIdentifiers>
-		<VersionPrefix>1.0.2</VersionPrefix>
 		<IsTrimmable>true</IsTrimmable>
+		<Title>Jc Google Mobile Ads SDK iOS Bindings</Title>
+		<Authors>Joseph Sawyer</Authors>
+		<Copyright>Joseph Sawyer</Copyright>
+		<Description>Google Mobile Ads SDK iOS Bindings.</Description>
+		<PackageProjectUrl>https://jcsawyer.com/</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/jcsawyer/Jc.AdMob.Avalonia/tree/main</RepositoryUrl>
 	</PropertyGroup>
 
 	<ItemGroup>
