@@ -5,13 +5,8 @@
 		<ImplicitUsings>true</ImplicitUsings>
 		<IsBindingProject>true</IsBindingProject>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-
+		<RuntimeIdentifiers>osx-x64;osx-arm64</RuntimeIdentifiers>
 		<VersionPrefix>1.0.2</VersionPrefix>
-
-		<!--
-      Enable trim analyzers for class libraries.
-      To learn more, see: https://learn.microsoft.com/dotnet/core/deploying/trimming/prepare-libraries-for-trimming
-    -->
 		<IsTrimmable>true</IsTrimmable>
 	</PropertyGroup>
 
@@ -19,9 +14,9 @@
 		<ObjcBindingApiDefinition Include="ApiDefinition.cs" />
 		<ObjcBindingCoreSource Include="StructsAndEnums.cs" />
 	</ItemGroup>
-
+	
 	<ItemGroup>
-		<NativeReference Include="GoogleMobileAds.xcframework">
+		<NativeReference Include="GMA.xcframework">
 			<Kind>Framework</Kind>
 			<SmartLink>True</SmartLink>
 			<ForceLoad>True</ForceLoad>
