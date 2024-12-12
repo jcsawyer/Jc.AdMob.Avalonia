@@ -6,12 +6,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jc.AdMob.Avalonia.Android",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jc.AdMob.Avalonia.iOS", "src\Jc.AdMob.Avalonia.iOS\Jc.AdMob.Avalonia.iOS.csproj", "{5C62F856-12C7-4AC2-9558-0896B220DADC}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{140A368B-1326-42B6-8D9E-1B561D3B77D6}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jc.GMA.iOS", "lib\Jc.GMA.iOS\Jc.GMA.iOS.csproj", "{98217675-D767-46F0-A895-D6236BFFD7C3}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jc.UMP.iOS", "lib\Jc.UMP.iOS\Jc.UMP.iOS.csproj", "{85542986-347A-42DE-BC13-909B894BAFD8}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,17 +24,7 @@ Global
 		{5C62F856-12C7-4AC2-9558-0896B220DADC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C62F856-12C7-4AC2-9558-0896B220DADC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5C62F856-12C7-4AC2-9558-0896B220DADC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{98217675-D767-46F0-A895-D6236BFFD7C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{98217675-D767-46F0-A895-D6236BFFD7C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{98217675-D767-46F0-A895-D6236BFFD7C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{98217675-D767-46F0-A895-D6236BFFD7C3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{85542986-347A-42DE-BC13-909B894BAFD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{85542986-347A-42DE-BC13-909B894BAFD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{85542986-347A-42DE-BC13-909B894BAFD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{85542986-347A-42DE-BC13-909B894BAFD8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{98217675-D767-46F0-A895-D6236BFFD7C3} = {140A368B-1326-42B6-8D9E-1B561D3B77D6}
-		{85542986-347A-42DE-BC13-909B894BAFD8} = {140A368B-1326-42B6-8D9E-1B561D3B77D6}
 	EndGlobalSection
 EndGlobal
