@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net8.0-ios</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>true</ImplicitUsings>
+		<IsBindingProject>true</IsBindingProject>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<RuntimeIdentifiers>osx-x64;osx-arm64</RuntimeIdentifiers>
+		<IsTrimmable>true</IsTrimmable>
+		<Title>Jc Google Mobile Ads SDK iOS Bindings</Title>
+		<Authors>Joseph Sawyer</Authors>
+		<Copyright>Joseph Sawyer</Copyright>
+		<Description>Google Mobile Ads SDK iOS Bindings.</Description>
+		<PackageProjectUrl>https://jcsawyer.com/</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/jcsawyer/Jc.AdMob.Avalonia/tree/main</RepositoryUrl>
+		<Version>1.0.400</Version>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ObjcBindingApiDefinition Include="ApiDefinition.cs" />
+		<ObjcBindingCoreSource Include="StructsAndEnums.cs" />
+	</ItemGroup>
+	
+	<ItemGroup>
+		<NativeReference Include="GMA.xcframework">
+			<Kind>Framework</Kind>
+			<SmartLink>True</SmartLink>
+			<ForceLoad>True</ForceLoad>
+			<LinkerFlags>-ObjC -lz -lsqlite3</LinkerFlags>
+			<Frameworks>AudioToolbox AVFoundation CFNetwork CoreGraphics CoreMedia CoreTelephony CoreVideo MediaPlayer MessageUI MobileCoreServices QuartzCore Security StoreKit SystemConfiguration</Frameworks>
+			<WeakFrameworks>AdSupport JavaScriptCore SafariServices WebKit</WeakFrameworks>
+		</NativeReference>
+	</ItemGroup>
+</Project>

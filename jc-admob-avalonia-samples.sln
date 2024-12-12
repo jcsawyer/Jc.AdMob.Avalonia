@@ -1,5 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35527.113 d17.12
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jc.AdMob.Avalonia.Sample", "samples\Jc.AdMob.Avalonia.Sample\Jc.AdMob.Avalonia.Sample.csproj", "{8FCDA73C-4E66-4C88-96B0-1B5B5C2FC099}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jc.AdMob.Avalonia.Sample.iOS", "samples\Jc.AdMob.Avalonia.Sample.iOS\Jc.AdMob.Avalonia.Sample.iOS.csproj", "{868AE964-7656-4412-A288-CBD333ADCC44}"
@@ -13,6 +16,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jc.AdMob.Avalonia.iOS", "src\Jc.AdMob.Avalonia.iOS\Jc.AdMob.Avalonia.iOS.csproj", "{5C62F856-12C7-4AC2-9558-0896B220DADC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jc.AdMob.Avalonia.Sample.Android", "samples\Jc.AdMob.Avalonia.Sample.Android\Jc.AdMob.Avalonia.Sample.Android.csproj", "{C5E61FAD-2F4F-420A-9E1A-72A6C1AB8E5C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jc.GoogleMobileAds.iOS", "lib\Jc.GoogleMobileAds.iOS\Jc.GoogleMobileAds.iOS.csproj", "{B9AABC9E-399B-4A4F-B94B-394FD7654C28}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,6 +49,13 @@ Global
 		{C5E61FAD-2F4F-420A-9E1A-72A6C1AB8E5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C5E61FAD-2F4F-420A-9E1A-72A6C1AB8E5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C5E61FAD-2F4F-420A-9E1A-72A6C1AB8E5C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9AABC9E-399B-4A4F-B94B-394FD7654C28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9AABC9E-399B-4A4F-B94B-394FD7654C28}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9AABC9E-399B-4A4F-B94B-394FD7654C28}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9AABC9E-399B-4A4F-B94B-394FD7654C28}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{8FCDA73C-4E66-4C88-96B0-1B5B5C2FC099} = {13FB1068-06DC-4478-BE91-B02D9411EA51}
