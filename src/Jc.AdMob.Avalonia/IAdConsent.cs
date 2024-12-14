@@ -18,4 +18,5 @@ public interface IAdConsent
     void Initialize();
     void Reset();
     void ShowConsent();
+    void ShowPrivacyOptions();
 }

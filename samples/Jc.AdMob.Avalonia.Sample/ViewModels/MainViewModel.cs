@@ -12,6 +12,7 @@ public class MainViewModel : ViewModelBase
 
     public ICommand ResetConsentCommand { get; }
     public ICommand ShowConsentCommand { get; }
+    public ICommand ShowPrivacyCommand  { get; }
     public ICommand ShowInterstitialAdCommand { get; }
     public ICommand ShowRewardedInterstitialAdCommand { get; }
     public ICommand ShowRewardedAdCommand { get; }
@@ -20,6 +21,7 @@ public class MainViewModel : ViewModelBase
     {
         ResetConsentCommand = ReactiveCommand.Create(ResetConsent);
         ShowConsentCommand = ReactiveCommand.Create(ShowConsent);
+        ShowPrivacyCommand = ReactiveCommand.Create(ShowPrivacy);
         ShowInterstitialAdCommand = ReactiveCommand.Create(ShowInterstitialAd);
         ShowRewardedInterstitialAdCommand = ReactiveCommand.Create(ShowRewardedInterstitialAd);
         ShowRewardedAdCommand = ReactiveCommand.Create(ShowRewardedAd);
@@ -33,6 +35,11 @@ public class MainViewModel : ViewModelBase
     private void ShowConsent()
     {
         AdMob.Current.Consent.ShowConsent();
+    }
+    
+    private void ShowPrivacy()
+    {
+        AdMob.Current.Consent.ShowPrivacyOptions();
     }
 
     private void ShowInterstitialAd()

@@ -24,6 +24,7 @@
       <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10">
         <Button Content="Reset Consent" Command="{Binding ResetConsentCommand}"></Button>
         <Button Content="Show Consent" Command="{Binding ShowConsentCommand}"></Button>
+        <Button Content="Show Privacy" Command="{Binding ShowPrivacyCommand}"></Button>
       </StackPanel>
       
       <Border Grid.Row="2" Background="Beige" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">

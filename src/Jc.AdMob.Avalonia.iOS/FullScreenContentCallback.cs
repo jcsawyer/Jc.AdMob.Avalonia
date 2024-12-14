@@ -10,7 +10,7 @@ internal sealed class FullScreenContentCallback : FullScreenContentDelegate
     public event EventHandler? RecordedClick;
     public event EventHandler? DismissedContent;
 
-    public override void DidPresentFullScreenContent(FullScreenPresentingAd ad)
+    public override void WillPresentFullScreenContent(FullScreenPresentingAd ad)
     {
         PresentedContent?.Invoke(this, EventArgs.Empty);
     }

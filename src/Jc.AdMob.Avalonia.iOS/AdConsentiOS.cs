@@ -57,6 +57,8 @@ internal sealed class AdConsentiOS : IAdConsent
             {
                 DebugGeography.Eea => Google.UserMessagingPlatform.DebugGeography.Eea,
                 DebugGeography.NotEea => Google.UserMessagingPlatform.DebugGeography.NotEea,
+                DebugGeography.RegulatedUsState => Google.UserMessagingPlatform.DebugGeography.RegulatedUSState,
+                DebugGeography.Other => Google.UserMessagingPlatform.DebugGeography.Other,
                 _ => Google.UserMessagingPlatform.DebugGeography.Disabled,
             },
         };
@@ -98,8 +100,23 @@ internal sealed class AdConsentiOS : IAdConsent
         var consentStatus = ConsentInformation.SharedInstance.ConsentStatus;
         if (consentStatus is ConsentStatus.Unknown or ConsentStatus.Required)
         {
+            // Ideally would like to use LoadAndPresentIfRequiredFromViewController here, but it doesn't seem to work in simulator 
             ConsentForm.LoadWithCompletionHandler(ConsentFormLoaded);
         }
+    }
+
+    public void ShowPrivacyOptions()
+    {
+        if (!_isInitialized)
+        {
+            OnConsentFormFailedToPresent?.Invoke(this,
+                new AdError("Consent is not initialized - try calling Initialize"));
+            return;
+        }
+
+        // Doesn't seem to work in simulator for some reason...
+        ConsentForm.PresentPrivacyOptionsFormFromViewController(
+            UIApplication.SharedApplication.KeyWindow.RootViewController, ConsentFormPresented);
     }
 
     private void ConsentFormLoaded(ConsentForm? consentForm, NSError? error)
@@ -121,6 +138,7 @@ internal sealed class AdConsentiOS : IAdConsent
             ConsentFormPresented);
     }
 
+
     private void ConsentFormPresented(NSError? error)
     {
         if (error is not null)
@@ -134,16 +152,16 @@ internal sealed class AdConsentiOS : IAdConsent
 
     private void InitializeAds()
     {
-        MobileAds.SharedInstance.Start(_ =>
+        if (CanShowAds || CanShowPersonalizedAds)
         {
-            if (CanShowAds || CanShowPersonalizedAds)
+            MobileAds.SharedInstance.Start(_ =>
             {
                 OnConsentProvided?.Invoke(this, EventArgs.Empty);
-            }
 
-            _isInitialized = true;
-            AdMob.Current.AdsInitialized();
-        });
+                _isInitialized = true;
+                AdMob.Current.AdsInitialized();
+            });
+        }
     }
 
     private bool CanShowAdsInternal()

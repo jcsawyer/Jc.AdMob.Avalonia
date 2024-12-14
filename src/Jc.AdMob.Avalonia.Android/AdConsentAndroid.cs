@@ -89,6 +89,11 @@ internal sealed class AdConsentAndroid : AdLoadCallback, IAdConsent, IConsentInf
             //UserMessagingPlatform.LoadConsentForm(_activity, this, this);
         }
     }
+    
+    public void ShowPrivacyOptions()
+    {
+        UserMessagingPlatform.LoadConsentForm(_activity, this, this);
+    }
 
     private void InitializeAds()
     {
