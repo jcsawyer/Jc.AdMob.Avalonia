@@ -49,7 +49,12 @@ protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
 {
     return base.CustomizeAppBuilder(builder)
         ...
-        .UseAdMob();
+        .UseAdMob(new AdMobOptions
+        {
+            TestDeviceIds = [],
+            TagForUnderAgeOfConsent = false,
+            TagForChildDirectedTreatment = false,
+        });
 }
 ```
 
@@ -64,26 +69,8 @@ Google requires all publishers serving ads to EEA and UK users to use a Google-C
 
 Jc.AdMob.Avalonia provides a consent service using the Google User Messaging Platform (UMP) SDK.
 
-> The addition of consent makes the previous `.UseAdMob(testDeviceIds)` obsolete and will be removed in the next major version bump.
-
 #### Usage
-To use the consent flow, you must call `.UseAdMob(AdMobOptions)` from the `MainActivity.cs` and/or `AppDelegate.cs`:
-
-```c#
-protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
-{
-    return base.CustomizeAppBuilder(builder)
-        ...
-        .UseAdMob(new AdMobOptions
-        {
-            TestDeviceIds = [],
-            TagForUnderAgeOfConsent = false,
-            TagForChildDirectedTreatment = false,
-        });
-}
-```
-
-When using the consent service, all services are accesed via the singleton `AdMob.Current`.
+When using the consent service, all services are accessed via the singleton `AdMob.Current`.
 
 To enable ads in regions where consent is required, you must show the consent dialog once consent is initialized:
 
@@ -314,3 +301,21 @@ protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
 | OnAdClicked | |
 | OnAdClosed | |
 | OnUserEarnedReward | Contains a `RewardItem` record |
+
+## Troubleshooting
+
+### The Google Mobile Ads SDK was initialized without AppMeasurement
+If you receive an error similar to the following:
+
+```
+GADInvalidInitializationException Reason: The Google Mobile Ads SDK was initialized without AppMeasurement. Google AdMob publishers, follow instructions here: https://googlemobileadssdk.page.link/admob-ios-update-plist to include the AppMeasurement framework and set the -ObjC linker flag. Google Ad Manager publishers, follow instructions here: https://googlemobileadssdk.page.link/ad-manager-ios-update-plist
+```
+
+Try adding the following to your `Info.plist`:
+
+```xml
+<key>GADIsAdManagerApp</key>
+<true/>
+```
+
+> The current iOS bindings are a little out of date and are still using an older version of the Google Mobile Ads SDK. While the version is now no longer a sunset version by Google, this is actively being worked on [here](https://github.com/jcsawyer/Jc.GoogleMobileAds.iOS).
