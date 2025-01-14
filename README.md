@@ -1,20 +1,16 @@
-<h1 align="center">
-    <br>
-    Jc.AdMob.Avalonia
-    <br>
-    &nbsp;
-</h1>
-<h4 align="center">
-    Library to bring AdMob advertisements to Avalonia mobile projects.
-</h4>
-<h6 align="center">
-    Avalonia solution derived from <a href="https://github.com/marius-bughiu/Plugin.AdMob/tree/main">marius-bughiu/Plugin.AdMob</a>
-</h6>
-<hr>
+# Jc.AdMob.Avalonia
+
+Library to bring AdMob advertisements to Avalonia mobile projects.
+
+Avalonia solution derived from [marius-bughiu/Plugin.AdMob](https://github.com/marius-bughiu/Plugin.AdMob/tree/main)
+
+---
 
 ## Table of Contents
 - [Introduction](#introduction)
 - [Usage](#usage)
+- [Preparing for Apple Privacy Manifests](#preparing-for-apple-privacy-manifests)
+- [Troubleshooting](#troubleshooting)
 
 ## Introduction
 
@@ -301,6 +297,24 @@ protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
 | OnAdClicked | |
 | OnAdClosed | |
 | OnUserEarnedReward | Contains a `RewardItem` record |
+
+## Preparing for Apple Privacy Manifests
+
+> I have yet to get around to testing any of this, but now the library is using a different iOS native binding package, the number of frameworks it depends on is significantly lower, and it should just be a case of updating to the latest when I find the time.
+
+In the mean time, this project leverages `NSUserDefaults` and so should just require the reason code `CA92.1`:
+
+```
+<dict>
+    <key>NSPrivacyAccessedAPIType</key>
+    <string>NSPrivacyAccessedAPICategoryUserDefaults</string>
+    <key>NSPrivacyAccessedAPITypeReasons</key>
+    <array>
+        <string>CA92.1</string>
+    </array>
+</dict>
+```
+You can read more about the Apple Privacy Manifest [here](https://github.com/xamarin/xamarin-macios/blob/main/docs/apple-privacy-manifest.md).
 
 ## Troubleshooting
 
