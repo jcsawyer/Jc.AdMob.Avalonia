@@ -1,3 +1,4 @@
+using AppTrackingTransparency;
 using Google.MobileAds;
 using Google.UserMessagingPlatform;
 
@@ -8,6 +9,7 @@ internal sealed class AdConsentiOS : IAdConsent
     private const int GoogleId = 755;
     private readonly AdMobOptions _options;
     private bool _isInitialized;
+    private ATTrackingManagerAuthorizationStatus _attStatus = ATTrackingManagerAuthorizationStatus.NotDetermined;
 
     public event EventHandler? OnConsentInitialized;
     public event EventHandler<AdError>? OnConsentFailedToInitialize;
@@ -22,9 +24,9 @@ internal sealed class AdConsentiOS : IAdConsent
                               (ConsentInformation.SharedInstance?.ConsentStatus is ConsentStatus.Obtained
                                   or ConsentStatus.NotRequired && CanShowAdsInternal());
 
-    public bool CanShowPersonalizedAds => _options.SkipConsent ||
+    public bool CanShowPersonalizedAds => _attStatus == ATTrackingManagerAuthorizationStatus.Authorized && (_options.SkipConsent ||
                                           (ConsentInformation.SharedInstance?.ConsentStatus is ConsentStatus.Obtained
-                                              or ConsentStatus.NotRequired && CanShowPersonalizedAdsInternal());
+                                              or ConsentStatus.NotRequired && CanShowPersonalizedAdsInternal()));
 
     public AdConsentiOS(AdMobOptions options)
     {
@@ -152,15 +154,33 @@ internal sealed class AdConsentiOS : IAdConsent
 
     private void InitializeAds()
     {
-        if (CanShowAds || CanShowPersonalizedAds)
+        if (CanShowAds)
         {
-            MobileAds.SharedInstance.Start(_ =>
+            if (!_options.SkipTransparencyTracking)
             {
-                OnConsentProvided?.Invoke(this, EventArgs.Empty);
+                ATTrackingManager.RequestTrackingAuthorization(status =>
+                {
+                    _attStatus = status;
+                    
+                    MobileAds.SharedInstance.Start(_ =>
+                    {
+                        OnConsentProvided?.Invoke(this, EventArgs.Empty);
 
-                _isInitialized = true;
-                AdMob.Current.AdsInitialized();
-            });
+                        _isInitialized = true;
+                        AdMob.Current.AdsInitialized();
+                    });
+                });
+            }
+            else
+            {
+                MobileAds.SharedInstance.Start(_ =>
+                {
+                    OnConsentProvided?.Invoke(this, EventArgs.Empty);
+
+                    _isInitialized = true;
+                    AdMob.Current.AdsInitialized();
+                });
+            }
         }
     }
 

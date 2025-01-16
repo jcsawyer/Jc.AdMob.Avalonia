@@ -7,6 +7,7 @@ Avalonia solution derived from [marius-bughiu/Plugin.AdMob](https://github.com/m
 ---
 
 ## Table of Contents
+
 - [Introduction](#introduction)
 - [Usage](#usage)
 - [Preparing for Apple Privacy Manifests](#preparing-for-apple-privacy-manifests)
@@ -18,10 +19,10 @@ Jc.AdMob.Avalonia is a library to bring [Google AdMob](https://developers.google
 
 The library currently supports the following ad units:
 
-| | Consent | Banner | Interstitial | Rewarded interstitial | Rewarded | Native advanced | App open |
-|---|---|---|---|---|---|---|---|
-| Android | ✓ | ✓ | ✓ | ✓ | ✓ | ☓ | ☓ | ☓ |
-| iOS | ✓ | ✓ | ✓ | ✓ | ✓ | ☓ | ☓ | ☓ |
+|         | Consent | Banner | Interstitial | Rewarded interstitial | Rewarded | Native advanced | App open |
+| ------- | ------- | ------ | ------------ | --------------------- | -------- | --------------- | -------- |
+| Android | ✓       | ✓      | ✓            | ✓                     | ✓        | ☓               | ☓        |
+| iOS     | ✓       | ✓      | ✓            | ✓                     | ✓        | ☓               | ☓        |
 
 ## Usage
 
@@ -61,11 +62,28 @@ Finally, follow the AdMob platform specific instructions in regard to configurin
 To configure test devices, the `.UseAdMob()` method accepts a collection of test device ids.
 
 ### Consent
+
 Google requires all publishers serving ads to EEA and UK users to use a Google-Certified Consent Management Platform (CMP).
 
 Jc.AdMob.Avalonia provides a consent service using the Google User Messaging Platform (UMP) SDK.
 
+#### iOS App Transparency Tracking
+
+When using `NSUserTrackingUsageDescription` in your `Info.plist`, your app must present the AppTrackingTransparency (ATT) dialog to the user to enable the AdMob personalised ads.
+By default this will be displayed after the consent dialog, but you can disable this by setting `SkipTransparencyTracking` to `true` in the `AdMobOptions`:
+
+```c#
+return base.CustomizeAppBuilder(builder)
+        ...
+        .UseAdMob(new AdMobOptions
+        {
+          ...
+            SkipTransparencyTracking = true,
+        });
+```
+
 #### Usage
+
 When using the consent service, all services are accessed via the singleton `AdMob.Current`.
 
 To enable ads in regions where consent is required, you must show the consent dialog once consent is initialized:
@@ -75,21 +93,21 @@ AdMob.Current.Consent.OnConsentInitialized += (_, _) => AdMob.Current.Consent.Sh
 ```
 
 #### Events
-| Event | Notes |
-|---|---|
-| OnConsentInitialized | |
-| OnConsentFailedToInitialize | |
-| OnConsentFormLoaded | iOS only - issue being investigated |
-| OnConsentFormFailedToLoad | iOS only - issue being investigated |
-| OnConsentFormFailedToPresent | |
-| OnConsentProvided | User consented and ads can be shown |
+
+| Event                        | Notes                               |
+| ---------------------------- | ----------------------------------- |
+| OnConsentInitialized         |                                     |
+| OnConsentFailedToInitialize  |                                     |
+| OnConsentFormLoaded          | iOS only - issue being investigated |
+| OnConsentFormFailedToLoad    | iOS only - issue being investigated |
+| OnConsentFormFailedToPresent |                                     |
+| OnConsentProvided            | User consented and ads can be shown |
 
 ### Banners
 
-| iOS                               | Android |
-|-----------------------------------|---|
+| iOS                                                           | Android                                                            |
+| ------------------------------------------------------------- | ------------------------------------------------------------------ |
 | <img alt="iOS Banner" src="img/iOS Banner.png" width="250" /> | <img alt="iOS Banner" src="img/Android Banner.jpeg" width="250" /> |
-
 
 The `BannerAd` control can be added to your XAML like so:
 
@@ -102,17 +120,18 @@ xmlns:admob="https://github.com/jc-admob-avalonia"
 ```
 
 #### Sizes
+
 The banner can be configured with the following sizes:
 
-| AdSize | Size |
-|---|---|
-| Banner | Mobile Marketing Association (MMA) banner ad size (320x50 density-independent pixels). |
-| FullBanner | Interactive Advertising Bureau (IAB) full banner ad size (468x60 density-independent pixels). |
-| Invalid | An invalid AdSize that will cause the ad request to fail immediately. |
-| LargeBanner | Large banner ad size (320x100 density-independent pixels). |
-| Leaderboard | Interactive Advertising Bureau (IAB) leaderboard ad size (728x90 density-independent pixels). |
+| AdSize          | Size                                                                                                |
+| --------------- | --------------------------------------------------------------------------------------------------- |
+| Banner          | Mobile Marketing Association (MMA) banner ad size (320x50 density-independent pixels).              |
+| FullBanner      | Interactive Advertising Bureau (IAB) full banner ad size (468x60 density-independent pixels).       |
+| Invalid         | An invalid AdSize that will cause the ad request to fail immediately.                               |
+| LargeBanner     | Large banner ad size (320x100 density-independent pixels).                                          |
+| Leaderboard     | Interactive Advertising Bureau (IAB) leaderboard ad size (728x90 density-independent pixels).       |
 | MediumRectangle | Interactive Advertising Bureau (IAB) medium rectangle ad size (300x250 density-independent pixels). |
-| WideSkyscrapper | IAB wide skyscraper ad size (160x600 density-independent pixels). |
+| WideSkyscrapper | IAB wide skyscraper ad size (160x600 density-independent pixels).                                   |
 
 > Note: If the size is left unspecified, the banner will resize to fit the parent container.
 
@@ -120,20 +139,20 @@ The banner can be configured with the following sizes:
 
 The banner exposes the following events:
 
-| Event | Notes |
-|---|---|
-| OnAdLoaded | |
-| OnAdFailedToLoad | |
-| OnAdImpression | |
-| OnAdClicked | |
-| OnAdOpened | |
-| OnAdClosed | |
-| OnAdSwiped | Android only |
+| Event            | Notes        |
+| ---------------- | ------------ |
+| OnAdLoaded       |              |
+| OnAdFailedToLoad |              |
+| OnAdImpression   |              |
+| OnAdClicked      |              |
+| OnAdOpened       |              |
+| OnAdClosed       |              |
+| OnAdSwiped       | Android only |
 
 ### Interstitial
 
-| iOS                               | Android |
-|-----------------------------------|---|
+| iOS                                                                 | Android                                                                  |
+| ------------------------------------------------------------------- | ------------------------------------------------------------------------ |
 | <img alt="iOS Banner" src="img/iOS Interstitial.png" width="250" /> | <img alt="iOS Banner" src="img/Android Interstitial.jpeg" width="250" /> |
 
 Interstitial ads can be used by calling `Interstitial.Create(unitId)` on the `AdMob` singleton.
@@ -170,21 +189,20 @@ protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
 
 #### Events
 
-| Event | Notes |
-|---|---|
-| OnAdLoaded | |
-| OnAdFailedToLoad | |
-| OnAdPresented | |
-| OnAdFailedToPresent | |
-| OnAdImpression | |
-| OnAdClicked | |
-| OnAdClosed | |
-
+| Event               | Notes |
+| ------------------- | ----- |
+| OnAdLoaded          |       |
+| OnAdFailedToLoad    |       |
+| OnAdPresented       |       |
+| OnAdFailedToPresent |       |
+| OnAdImpression      |       |
+| OnAdClicked         |       |
+| OnAdClosed          |       |
 
 ### Rewarded Interstitial
 
-| iOS                               | Android |
-|-----------------------------------|---|
+| iOS                                                                           | Android                                                                          |
+| ----------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
 | <img alt="iOS Banner" src="img/iOS Rewarded Interstitial.jpeg" width="250" /> | <img alt="iOS Banner" src="img/Android Rewarded Interstitial.jpg" width="250" /> |
 
 Interstitial ads can be used by calling `RewardedInterstitial.Create(unitId)` on the `AdMob` singleton.
@@ -224,30 +242,30 @@ protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
 
 #### Events
 
-| Event | Notes |
-|---|---|
-| OnAdLoaded | |
-| OnAdFailedToLoad | |
-| OnAdPresented | |
-| OnAdFailedToPresent | |
-| OnAdImpression | |
-| OnAdClicked | |
-| OnAdClosed | |
-| OnUserEarnedReward | Contains a `RewardItem` record |
+| Event               | Notes                          |
+| ------------------- | ------------------------------ |
+| OnAdLoaded          |                                |
+| OnAdFailedToLoad    |                                |
+| OnAdPresented       |                                |
+| OnAdFailedToPresent |                                |
+| OnAdImpression      |                                |
+| OnAdClicked         |                                |
+| OnAdClosed          |                                |
+| OnUserEarnedReward  | Contains a `RewardItem` record |
 
 #### RewardItem
 
 The reward item record is comprised of the following properties:
 
-| Property | Description |
-| --- | --- |
-| Amount | The amount rewarded. |
-| Type | The type of reward earned. |
+| Property | Description                |
+| -------- | -------------------------- |
+| Amount   | The amount rewarded.       |
+| Type     | The type of reward earned. |
 
 ### Rewarded
 
-| iOS                               | Android |
-|-----------------------------------|---|
+| iOS                                                                           | Android                                                                          |
+| ----------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
 | <img alt="iOS Banner" src="img/iOS Rewarded Interstitial.jpeg" width="250" /> | <img alt="iOS Banner" src="img/Android Rewarded Interstitial.jpg" width="250" /> |
 
 Interstitial ads can be used by calling `Rewarded.Create(unitId)` on the `AdMob` singleton.
@@ -287,16 +305,16 @@ protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
 
 #### Events
 
-| Event | Notes |
-|---|---|
-| OnAdLoaded | |
-| OnAdFailedToLoad | |
-| OnAdPresented | |
-| OnAdFailedToPresent | |
-| OnAdImpression | |
-| OnAdClicked | |
-| OnAdClosed | |
-| OnUserEarnedReward | Contains a `RewardItem` record |
+| Event               | Notes                          |
+| ------------------- | ------------------------------ |
+| OnAdLoaded          |                                |
+| OnAdFailedToLoad    |                                |
+| OnAdPresented       |                                |
+| OnAdFailedToPresent |                                |
+| OnAdImpression      |                                |
+| OnAdClicked         |                                |
+| OnAdClosed          |                                |
+| OnUserEarnedReward  | Contains a `RewardItem` record |
 
 ## Preparing for Apple Privacy Manifests
 
@@ -314,11 +332,13 @@ In the mean time, this project leverages `NSUserDefaults` and so should just req
     </array>
 </dict>
 ```
+
 You can read more about the Apple Privacy Manifest [here](https://github.com/xamarin/xamarin-macios/blob/main/docs/apple-privacy-manifest.md).
 
 ## Troubleshooting
 
 ### The Google Mobile Ads SDK was initialized without AppMeasurement
+
 If you receive an error similar to the following:
 
 ```
