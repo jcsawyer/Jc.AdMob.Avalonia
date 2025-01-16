@@ -19,8 +19,6 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
-      - name: Use Xcode version 16
-        run: sudo xcode-select -s /Applications/Xcode_16.app/Contents/Developer
       - name: Restore workloads
         run: dotnet workload restore
       - name: Set VERSION variable from tag
