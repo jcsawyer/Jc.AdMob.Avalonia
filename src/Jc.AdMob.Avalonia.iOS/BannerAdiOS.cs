@@ -21,48 +21,53 @@ internal sealed class BannerAdiOS : INativeBannerAd
         _options = options;
     }
 
-    public IPlatformHandle CreateControl(
+    public IPlatformHandle? CreateControl(
         string? unitId,
         BannerAd wrapper,
         IPlatformHandle parent,
         Func<IPlatformHandle> createDefault)
     {
-        var adSize = wrapper.AdSize switch
+        try
         {
-            AdSize.Banner => GetSize(320, 50),
-            AdSize.FullBanner => GetSize(486, 60),
-            AdSize.LargeBanner => GetSize(320, 100),
-            AdSize.Leaderboard => GetSize(728, 90),
-            AdSize.MediumRectangle => GetSize(300, 250),
-            AdSize.WideSkyscraper => GetSize(160, 600),
-            _ => AdSizeCons.GetCurrentOrientationAnchoredAdaptiveBannerAdSize(UIScreen.MainScreen.Bounds.Width)
-        };
+            var adSize = wrapper.AdSize switch
+            {
+                AdSize.Banner => GetSize(320, 50),
+                AdSize.FullBanner => GetSize(486, 60),
+                AdSize.LargeBanner => GetSize(320, 100),
+                AdSize.Leaderboard => GetSize(728, 90),
+                AdSize.MediumRectangle => GetSize(300, 250),
+                AdSize.WideSkyscraper => GetSize(160, 600),
+                _ => AdSizeCons.GetCurrentOrientationAnchoredAdaptiveBannerAdSize(UIScreen.MainScreen.Bounds.Width)
+            };
 
-        var adView = new BannerView()
-        {
-            AdSize = adSize,
-            AdUnitId = string.IsNullOrWhiteSpace(unitId) ? TestUnit : unitId,
-            RootViewController = GetRootViewController(),
-        };
+            var adView = new BannerView()
+            {
+                AdSize = adSize,
+                AdUnitId = string.IsNullOrWhiteSpace(unitId) ? TestUnit : unitId,
+                RootViewController = GetRootViewController(),
+            };
 
-        if (_options is null || AdMob.Current.CanShowAds)
-        {
-            RenderBanner(adView, wrapper);
-        }
-        else
-        {
-            AdMob.Current.Consent.OnConsentProvided += (_, _) =>
+            if (_options is null || AdMob.Current.CanShowAds)
             {
                 RenderBanner(adView, wrapper);
-            };
+            }
+            else
+            {
+                AdMob.Current.Consent.OnConsentProvided += (_, _) => { RenderBanner(adView, wrapper); };
+            }
+
+            wrapper.Width = adSize.Size.Width;
+            wrapper.Height = adSize.Size.Height;
+
+            return new UIViewControlHandle(adView);
         }
-
-        wrapper.Width = adSize.Size.Width;
-        wrapper.Height = adSize.Size.Height;
-
-        return new UIViewControlHandle(adView);
+        catch (Exception ex)
+        {
+            wrapper.AdFailedToLoad(this, new AdError(ex.Message));
+            return null;
+        }
     }
-    
+
     private void RenderBanner(BannerView adView, BannerAd wrapper)
     {
         if (_testDeviceIds is not null)
