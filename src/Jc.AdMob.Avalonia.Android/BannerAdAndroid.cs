@@ -23,46 +23,54 @@ internal sealed class BannerAdAndroid : INativeBannerAd
         _options = options;
     }
 
-    public IPlatformHandle CreateControl(
+    public IPlatformHandle? CreateControl(
         string? unitId, BannerAd wrapper,
         IPlatformHandle parent,
         Func<IPlatformHandle> createDefault)
     {
-        var parentContext = (parent as AndroidViewControlHandle)?.View.Context ??
-                            Application.Context;
-
-        var adSize = wrapper.AdSize switch
+        try
         {
-            AdSize.Banner => global::Android.Gms.Ads.AdSize.Banner,
-            AdSize.FullBanner => global::Android.Gms.Ads.AdSize.FullBanner,
-            AdSize.Invalid => global::Android.Gms.Ads.AdSize.Invalid,
-            AdSize.LargeBanner => global::Android.Gms.Ads.AdSize.LargeBanner,
-            AdSize.Leaderboard => global::Android.Gms.Ads.AdSize.Leaderboard,
-            AdSize.MediumRectangle => global::Android.Gms.Ads.AdSize.MediumRectangle,
-            AdSize.WideSkyscraper => global::Android.Gms.Ads.AdSize.WideSkyscraper,
-            _ => global::Android.Gms.Ads.AdSize.GetCurrentOrientationAnchoredAdaptiveBannerAdSize(parentContext,
-                GetScreenWidth(parentContext))
-        };
+            var parentContext = (parent as AndroidViewControlHandle)?.View.Context ??
+                                Application.Context;
 
-        var adView = new AdView(parentContext)
-        {
-            AdSize = adSize,
-            AdUnitId = string.IsNullOrWhiteSpace(unitId) ? TestUnit : unitId,
-        };
+            var adSize = wrapper.AdSize switch
+            {
+                AdSize.Banner => global::Android.Gms.Ads.AdSize.Banner,
+                AdSize.FullBanner => global::Android.Gms.Ads.AdSize.FullBanner,
+                AdSize.Invalid => global::Android.Gms.Ads.AdSize.Invalid,
+                AdSize.LargeBanner => global::Android.Gms.Ads.AdSize.LargeBanner,
+                AdSize.Leaderboard => global::Android.Gms.Ads.AdSize.Leaderboard,
+                AdSize.MediumRectangle => global::Android.Gms.Ads.AdSize.MediumRectangle,
+                AdSize.WideSkyscraper => global::Android.Gms.Ads.AdSize.WideSkyscraper,
+                _ => global::Android.Gms.Ads.AdSize.GetCurrentOrientationAnchoredAdaptiveBannerAdSize(parentContext,
+                    GetScreenWidth(parentContext))
+            };
 
-        if (_options is null || AdMob.Current.CanShowAds)
-        {
-            RenderBanner(adView, wrapper);
+            var adView = new AdView(parentContext)
+            {
+                AdSize = adSize,
+                AdUnitId = string.IsNullOrWhiteSpace(unitId) ? TestUnit : unitId,
+            };
+
+            if (_options is null || AdMob.Current.CanShowAds)
+            {
+                RenderBanner(adView, wrapper);
+            }
+            else
+            {
+                AdMob.Current.Consent.OnConsentProvided += (_, _) => { RenderBanner(adView, wrapper); };
+            }
+
+            wrapper.Width = adSize.Width;
+            wrapper.Height = adSize.Height;
+
+            return new AndroidViewControlHandle(adView);
         }
-        else
+        catch (Exception e)
         {
-            AdMob.Current.Consent.OnConsentProvided += (_, _) => { RenderBanner(adView, wrapper); };
+            wrapper.AdFailedToLoad(this, new AdError(e.Message));
+            return null;
         }
-
-        wrapper.Width = adSize.Width;
-        wrapper.Height = adSize.Height;
-
-        return new AndroidViewControlHandle(adView);
     }
 
     private void RenderBanner(AdView adView, BannerAd wrapper)

@@ -5,5 +5,5 @@ namespace Jc.AdMob.Avalonia;
 
 public interface INativeBannerAd
 {
-    IPlatformHandle CreateControl(string? unitId, BannerAd wrapper, IPlatformHandle parent, Func<IPlatformHandle> createDefault);
+    IPlatformHandle? CreateControl(string? unitId, BannerAd wrapper, IPlatformHandle parent, Func<IPlatformHandle> createDefault);
 }
