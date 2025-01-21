@@ -151,7 +151,6 @@ internal sealed class AdConsentiOS : IAdConsent
             return;
         }
 
-        OnConsentFormLoaded?.Invoke(this, EventArgs.Empty);
         InitializeAds();
     }
 
@@ -165,6 +164,7 @@ internal sealed class AdConsentiOS : IAdConsent
                 {
                     ATTrackingManager.RequestTrackingAuthorization(status =>
                     {
+                        OnConsentFormClosed?.Invoke(this, EventArgs.Empty);
                         _attStatus = status;
 
                         MobileAds.SharedInstance.Start(_ =>
@@ -178,6 +178,8 @@ internal sealed class AdConsentiOS : IAdConsent
                 }
                 else
                 {
+                    OnConsentFormClosed?.Invoke(this, EventArgs.Empty);
+
                     MobileAds.SharedInstance.Start(_ =>
                     {
                         OnConsentProvided?.Invoke(this, EventArgs.Empty);
