@@ -44,36 +44,36 @@ internal sealed class AdConsentAndroid : AdLoadCallback, IAdConsent, IConsentInf
     {
         try
         {
-        var consentInformation = UserMessagingPlatform.GetConsentInformation(_activity);
-        if (_options.SkipConsent || consentInformation.ConsentStatus is ConsentInformationConsentStatus.NotRequired)
-        {
-            InitializeAds();
-            return;
-        }
-
-        var builder = new ConsentDebugSettings.Builder(_activity);
-        if (_options.TestDeviceIds is not null)
-        {
-            foreach (var testDeviceId in _options.TestDeviceIds)
+            var consentInformation = UserMessagingPlatform.GetConsentInformation(_activity);
+            if (_options.SkipConsent || consentInformation.ConsentStatus is ConsentInformationConsentStatus.NotRequired)
             {
-                builder.AddTestDeviceHashedId(testDeviceId);
+                InitializeAds();
+                return;
             }
-        }
 
-        if (_options.DebugGeography is not DebugGeography.Disabled)
-        {
-            builder.SetDebugGeography((int)_options.DebugGeography);
-        }
+            var builder = new ConsentDebugSettings.Builder(_activity);
+            if (_options.TestDeviceIds is not null)
+            {
+                foreach (var testDeviceId in _options.TestDeviceIds)
+                {
+                    builder.AddTestDeviceHashedId(testDeviceId);
+                }
+            }
 
-        var consentDebugSettings = builder.Build();
-        var requestParameters = new ConsentRequestParameters.Builder()
-            .SetConsentDebugSettings(consentDebugSettings)
-            .SetTagForUnderAgeOfConsent(_options.TagForUnderAgeOfConsent)
-            .SetAdMobAppId(_options.AppId)
-            .Build();
+            if (_options.DebugGeography is not DebugGeography.Disabled)
+            {
+                builder.SetDebugGeography((int)_options.DebugGeography);
+            }
 
-        consentInformation.RequestConsentInfoUpdate(_activity, requestParameters, this, this);
-        _consentInformation = consentInformation;
+            var consentDebugSettings = builder.Build();
+            var requestParameters = new ConsentRequestParameters.Builder()
+                .SetConsentDebugSettings(consentDebugSettings)
+                .SetTagForUnderAgeOfConsent(_options.TagForUnderAgeOfConsent)
+                .SetAdMobAppId(_options.AppId)
+                .Build();
+
+            consentInformation.RequestConsentInfoUpdate(_activity, requestParameters, this, this);
+            _consentInformation = consentInformation;
         
         }
         catch (Exception e)
@@ -106,6 +106,7 @@ internal sealed class AdConsentAndroid : AdLoadCallback, IAdConsent, IConsentInf
 
     private void InitializeAds()
     {
+        OnConsentFormClosed?.Invoke(this, EventArgs.Empty);
         MobileAds.Initialize(_activity, this);
     }
 
@@ -128,7 +129,6 @@ internal sealed class AdConsentAndroid : AdLoadCallback, IAdConsent, IConsentInf
             return;
         }
 
-        OnConsentFormClosed?.Invoke(this, EventArgs.Empty);
         _consentInformation = UserMessagingPlatform.GetConsentInformation(_activity);
         InitializeAds();
     }

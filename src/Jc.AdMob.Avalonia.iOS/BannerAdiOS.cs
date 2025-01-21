@@ -53,7 +53,17 @@ internal sealed class BannerAdiOS : INativeBannerAd
             }
             else
             {
-                AdMob.Current.Consent.OnConsentProvided += (_, _) => { RenderBanner(adView, wrapper); };
+                AdMob.Current.Consent.OnConsentProvided += (_, _) =>
+                {
+                    try
+                    {
+                        RenderBanner(adView, wrapper);
+                    }
+                    catch (Exception e)
+                    {
+                        wrapper.AdFailedToLoad(this, new AdError(e.Message));
+                    }
+                };
             }
 
             wrapper.Width = adSize.Size.Width;
