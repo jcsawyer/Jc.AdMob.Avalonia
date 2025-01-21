@@ -94,14 +94,15 @@ AdMob.Current.Consent.OnConsentInitialized += (_, _) => AdMob.Current.Consent.Sh
 
 #### Events
 
-| Event                        | Notes                               |
-| ---------------------------- | ----------------------------------- |
-| OnConsentInitialized         |                                     |
-| OnConsentFailedToInitialize  |                                     |
-| OnConsentFormLoaded          | iOS only - issue being investigated |
-| OnConsentFormFailedToLoad    | iOS only - issue being investigated |
-| OnConsentFormFailedToPresent |                                     |
-| OnConsentProvided            | User consented and ads can be shown |
+| Event                        | Notes                                     |
+| ---------------------------- | ----------------------------------------- |
+| OnConsentInitialized         |                                           |
+| OnConsentFailedToInitialize  |                                           |
+| OnConsentFormLoaded          | iOS only - issue being investigated       |
+| OnConsentFormFailedToLoad    | iOS only - issue being investigated       |
+| OnConsentFormFailedToPresent |                                           |
+| OnConsentProvided            | User consented and ads can be shown       |
+| OnConsentFormClosed          | User consent form was displaed and closed |
 
 ### Banners
 

@@ -16,6 +16,7 @@ internal sealed class AdConsentiOS : IAdConsent
     public event EventHandler? OnConsentFormLoaded;
     public event EventHandler<AdError>? OnConsentFormFailedToLoad;
     public event EventHandler<AdError>? OnConsentFormFailedToPresent;
+    public event EventHandler? OnConsentFormClosed;
     public event EventHandler? OnConsentProvided;
 
     public bool IsInitialized => _isInitialized;
@@ -24,9 +25,10 @@ internal sealed class AdConsentiOS : IAdConsent
                               (ConsentInformation.SharedInstance?.ConsentStatus is ConsentStatus.Obtained
                                   or ConsentStatus.NotRequired && CanShowAdsInternal());
 
-    public bool CanShowPersonalizedAds => _attStatus == ATTrackingManagerAuthorizationStatus.Authorized && (_options.SkipConsent ||
-                                          (ConsentInformation.SharedInstance?.ConsentStatus is ConsentStatus.Obtained
-                                              or ConsentStatus.NotRequired && CanShowPersonalizedAdsInternal()));
+    public bool CanShowPersonalizedAds => _attStatus == ATTrackingManagerAuthorizationStatus.Authorized &&
+                                          (_options.SkipConsent ||
+                                           (ConsentInformation.SharedInstance?.ConsentStatus is ConsentStatus.Obtained
+                                               or ConsentStatus.NotRequired && CanShowPersonalizedAdsInternal()));
 
     public AdConsentiOS(AdMobOptions options)
     {
@@ -149,6 +151,7 @@ internal sealed class AdConsentiOS : IAdConsent
             return;
         }
 
+        OnConsentFormLoaded?.Invoke(this, EventArgs.Empty);
         InitializeAds();
     }
 
@@ -156,12 +159,25 @@ internal sealed class AdConsentiOS : IAdConsent
     {
         if (CanShowAds)
         {
-            if (!_options.SkipTransparencyTracking)
+            try
             {
-                ATTrackingManager.RequestTrackingAuthorization(status =>
+                if (!_options.SkipTransparencyTracking)
                 {
-                    _attStatus = status;
-                    
+                    ATTrackingManager.RequestTrackingAuthorization(status =>
+                    {
+                        _attStatus = status;
+
+                        MobileAds.SharedInstance.Start(_ =>
+                        {
+                            OnConsentProvided?.Invoke(this, EventArgs.Empty);
+
+                            _isInitialized = true;
+                            AdMob.Current.AdsInitialized();
+                        });
+                    });
+                }
+                else
+                {
                     MobileAds.SharedInstance.Start(_ =>
                     {
                         OnConsentProvided?.Invoke(this, EventArgs.Empty);
@@ -169,17 +185,11 @@ internal sealed class AdConsentiOS : IAdConsent
                         _isInitialized = true;
                         AdMob.Current.AdsInitialized();
                     });
-                });
+                }
             }
-            else
+            catch (Exception e)
             {
-                MobileAds.SharedInstance.Start(_ =>
-                {
-                    OnConsentProvided?.Invoke(this, EventArgs.Empty);
-
-                    _isInitialized = true;
-                    AdMob.Current.AdsInitialized();
-                });
+                OnConsentFailedToInitialize?.Invoke(this, new AdError(e.Message));
             }
         }
     }

@@ -9,6 +9,7 @@ public interface IAdConsent
     event EventHandler? OnConsentFormLoaded;
     event EventHandler<AdError>? OnConsentFormFailedToLoad;
     event EventHandler<AdError>? OnConsentFormFailedToPresent;
+    public event EventHandler? OnConsentFormClosed;
     event EventHandler? OnConsentProvided;
     
     bool IsInitialized { get; }
