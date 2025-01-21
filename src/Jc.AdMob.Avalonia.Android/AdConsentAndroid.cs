@@ -16,6 +16,7 @@ internal sealed class AdConsentAndroid : AdLoadCallback, IAdConsent, IConsentInf
     public event EventHandler? OnConsentFormLoaded;
     public event EventHandler<AdError>? OnConsentFormFailedToLoad;
     public event EventHandler<AdError>? OnConsentFormFailedToPresent;
+    public event EventHandler? OnConsentFormClosed;
     public event EventHandler? OnConsentProvided;
 
     private bool _isInitialized;
@@ -41,6 +42,8 @@ internal sealed class AdConsentAndroid : AdLoadCallback, IAdConsent, IConsentInf
 
     public void Initialize()
     {
+        try
+        {
         var consentInformation = UserMessagingPlatform.GetConsentInformation(_activity);
         if (_options.SkipConsent || consentInformation.ConsentStatus is ConsentInformationConsentStatus.NotRequired)
         {
@@ -71,6 +74,12 @@ internal sealed class AdConsentAndroid : AdLoadCallback, IAdConsent, IConsentInf
 
         consentInformation.RequestConsentInfoUpdate(_activity, requestParameters, this, this);
         _consentInformation = consentInformation;
+        
+        }
+        catch (Exception e)
+        {
+            OnConsentFailedToInitialize?.Invoke(this, new AdError(e.Message));
+        }
     }
 
     public void Reset()
@@ -119,6 +128,7 @@ internal sealed class AdConsentAndroid : AdLoadCallback, IAdConsent, IConsentInf
             return;
         }
 
+        OnConsentFormClosed?.Invoke(this, EventArgs.Empty);
         _consentInformation = UserMessagingPlatform.GetConsentInformation(_activity);
         InitializeAds();
     }
