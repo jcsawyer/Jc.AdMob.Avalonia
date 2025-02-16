@@ -6,8 +6,8 @@ internal static class AdRequest
 {
     public static Request GetRequest()
     {
-        MobileAds.SharedInstance.RequestConfiguration.TagForChildDirectedTreatment(AdMob.Current.Options.TagForChildDirectedTreatment);
-        MobileAds.SharedInstance.RequestConfiguration.TagForUnderAgeOfConsent(AdMob.Current.Options.TagForUnderAgeOfConsent);
+        MobileAds.SharedInstance.RequestConfiguration.TagForChildDirectedTreatment =  AdMob.Current.Options.TagForChildDirectedTreatment ? 1 : 0;
+        MobileAds.SharedInstance.RequestConfiguration.TagForUnderAgeOfConsent = AdMob.Current.Options.TagForUnderAgeOfConsent ? 1 : 0;
         if (AdMob.Current.Options.TestDeviceIds is not null)
         {
             MobileAds.SharedInstance.RequestConfiguration.TestDeviceIdentifiers = AdMob.Current.Options.TestDeviceIds.ToArray();

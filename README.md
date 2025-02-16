@@ -57,6 +57,27 @@ protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
 
 Finally, follow the AdMob platform specific instructions in regard to configuring the application/unit ids.
 
+### iOS
+
+For iOS projects, from `v11.13.0`, you must add the following to your csproj file to support linking with Swift system libraries:
+
+```xml
+<Target Name="LinkWithSwift" DependsOnTargets="_ParseBundlerArguments;_DetectSdkLocations" BeforeTargets="_LinkNativeExecutable">
+    <PropertyGroup>
+        <_SwiftPlatform Condition="$(RuntimeIdentifier.StartsWith('iossimulator-'))">iphonesimulator</_SwiftPlatform>
+        <_SwiftPlatform Condition="$(RuntimeIdentifier.StartsWith('ios-'))">iphoneos</_SwiftPlatform>
+    </PropertyGroup>
+    <ItemGroup>
+        <_CustomLinkFlags Include="-L" />
+        <_CustomLinkFlags Include="/usr/lib/swift" />
+        <_CustomLinkFlags Include="-L" />
+        <_CustomLinkFlags Include="$(_SdkDevPath)/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/$(_SwiftPlatform)" />
+        <_CustomLinkFlags Include="-Wl,-rpath" />
+        <_CustomLinkFlags Include="-Wl,/usr/lib/swift" />
+    </ItemGroup>
+</Target>
+```
+
 ### Test Devices
 
 To configure test devices, the `.UseAdMob()` method accepts a collection of test device ids.

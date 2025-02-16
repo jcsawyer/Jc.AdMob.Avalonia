@@ -41,8 +41,6 @@
 	</array>
 	<key>GADApplicationIdentifier</key>
 	<string>ca-app-pub-9127086931863581~2923947432</string>
-	<key>GADIsAdManagerApp</key>
-	<true/>
 	<key>SKAdNetworkItems</key>
 	<array>
 		<dict>
