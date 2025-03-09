@@ -18,7 +18,7 @@
     <ItemGroup>
         <PackageReference Include="Avalonia" Version="$(AvaloniaVersion)" />
         <PackageReference Include="Avalonia.iOS" Version="$(AvaloniaVersion)" />
-        <PackageReference Include="Jc.GMA.iOS" Version="11.13.1" />
+        <PackageReference Include="Jc.GMA.iOS" Version="11.13.4" />
         <PackageReference Include="Jc.UMP.iOS" Version="2.7.3" />
     </ItemGroup>
 
