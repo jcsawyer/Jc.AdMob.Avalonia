@@ -3,7 +3,7 @@ name: Build
 env:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
   DOTNET_NOLOGO: true
-  DOTNET_VERSION: 8.0.x
+  DOTNET_VERSION: 9.0.x
 
 on:
   push:
