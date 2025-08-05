@@ -12,6 +12,7 @@ Avalonia solution derived from [marius-bughiu/Plugin.AdMob](https://github.com/m
 - [Usage](#usage)
 - [Preparing for Apple Privacy Manifests](#preparing-for-apple-privacy-manifests)
 - [Troubleshooting](#troubleshooting)
+- [Avalonia 12.x Migration](#avalonia-12x-migration)
 
 ## Introduction
 
@@ -21,8 +22,8 @@ The library currently supports the following ad units:
 
 |         | Consent | Banner | Interstitial | Rewarded interstitial | Rewarded | Native advanced | App open |
 | ------- | ------- | ------ | ------------ | --------------------- | -------- | --------------- | -------- |
-| Android | ✓       | ✓      | ✓            | ✓                     | ✓        | ☓               | ☓        |
-| iOS     | ✓       | ✓      | ✓            | ✓                     | ✓        | ☓               | ☓        |
+| Android | ✓       | ✓      | ✓            | ✓                     | ✓        | ☓               | ✓        |
+| iOS     | ✓       | ✓      | ✓            | ✓                     | ✓        | ☓               | ✓        |
 
 ## Usage
 
@@ -338,6 +339,56 @@ protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
 | OnAdClosed          |                                |
 | OnUserEarnedReward  | Contains a `RewardItem` record |
 
+### App Open
+
+| iOS                                                             | Android                                                             |
+| --------------------------------------------------------------- | ------------------------------------------------------------------- |
+| <img alt="iOS Banner" src="img/iOS App Open.png" width="250" /> | <img alt="iOS Banner" src="img/Android App Open.jpg" width="250" /> |
+
+App Open ads can be used by calling `AppOpen.Create(unitId)` on the `AdMob` singleton.
+
+This call will load and the return the app load ad with an `OnAdLoaded` event once it's finished loaded. `.Show()` can then be called to display the ad.
+
+```c#
+public ICommand ShowAppOpenAdCommand { get; }
+
+public MainViewModel()
+{
+    ShowAppOpenAdCommand = ReactiveCommand.Create(ShowAppOpenAd);
+}
+
+private void ShowAppOpenAd()
+{
+    var appOpenAd = AdMob.Current.AppOpen.Create();
+    appOpenAd.OnAdLoaded += (_, _) => appOpenAd.Show();
+}
+```
+
+#### Android
+
+When using app open ads on Android, the `Activity` must be passed into the `.AddAdMob()` call:
+
+```c#
+protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
+{
+    return base.CustomizeAppBuilder(builder)
+        ...
+        .UseAdMob(this, adMobOptions);
+}
+```
+
+#### Events
+
+| Event               | Notes |
+| ------------------- | ----- |
+| OnAdLoaded          |       |
+| OnAdFailedToLoad    |       |
+| OnAdPresented       |       |
+| OnAdFailedToPresent |       |
+| OnAdImpression      |       |
+| OnAdClicked         |       |
+| OnAdClosed          |       |
+
 ## Preparing for Apple Privacy Manifests
 
 > I have yet to get around to testing any of this, but now the library is using a different iOS native binding package, the number of frameworks it depends on is significantly lower, and it should just be a case of updating to the latest when I find the time.
@@ -375,3 +426,7 @@ Try adding the following to your `Info.plist`:
 ```
 
 > The current iOS bindings are a little out of date and are still using an older version of the Google Mobile Ads SDK. While the version is now no longer a sunset version by Google, this is actively being worked on [here](https://github.com/jcsawyer/Jc.GoogleMobileAds.iOS).
+
+## Avalonia 12.x Migration
+
+Coming soon...

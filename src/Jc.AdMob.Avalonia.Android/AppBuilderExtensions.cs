@@ -8,11 +8,14 @@ public static class AppBuilderExtensions
     {
         return appBuilder.AfterSetup(_ =>
         {
+            AdMob.Current.AppOpen = new Avalonia.AppOpenAd();
             AdMob.Current.Consent = new AdConsentAndroid(activity, options);
             AdMob.Current.Interstitial = new Avalonia.InterstitialAd();
             AdMob.Current.RewardedInterstitial = new Avalonia.RewardedInterstitialAd();
             AdMob.Current.Rewarded = new Avalonia.RewardedAd();
             
+            AppOpenAd.Activity = activity;
+            Avalonia.AppOpenAd.ImplementationFactory = (unitId) => new AppOpenAd(options, unitId);
             InterstitialAd.Activity = activity;
             Avalonia.InterstitialAd.ImplementationFactory = (unitId) => new InterstitialAd(options, unitId);
             RewardedInterstitialAd.Activity = activity;
