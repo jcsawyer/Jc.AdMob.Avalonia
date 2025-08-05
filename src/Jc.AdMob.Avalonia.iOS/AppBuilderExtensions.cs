@@ -9,11 +9,13 @@ public static class AppBuilderExtensions
     {
         return appBuilder.AfterSetup(_ =>
         {
+            AdMob.Current.AppOpen = new Avalonia.AppOpenAd();
             AdMob.Current.Consent = new AdConsentiOS(options);
             AdMob.Current.Interstitial = new Avalonia.InterstitialAd();
             AdMob.Current.RewardedInterstitial = new Avalonia.RewardedInterstitialAd();
             AdMob.Current.Rewarded = new Avalonia.RewardedAd();
 
+            Avalonia.AppOpenAd.ImplementationFactory = unitId => new AppOpenAd(options, unitId);
             Avalonia.InterstitialAd.ImplementationFactory = unitId => new InterstitialAd(options, unitId);
             Avalonia.RewardedInterstitialAd.ImplementationFactory = unitId => new RewardedInterstitialAd(options, unitId);
             Avalonia.RewardedAd.ImplementationFactory = unitId => new RewardedAd(options, unitId);

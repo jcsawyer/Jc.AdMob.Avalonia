@@ -8,6 +8,8 @@ internal sealed class InternalAdMob : IAdMob
     
     public event EventHandler? OnAdsInitialized;
     
+    public AppOpenAd AppOpen { get; set; }
+    
     public IAdConsent Consent { get; set; }
     
     public InterstitialAd Interstitial { get; set; }

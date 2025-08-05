@@ -6,6 +6,7 @@ public interface IAdMob
 {
     public event EventHandler? OnAdsInitialized;
     
+    AppOpenAd AppOpen { get; internal set; }
     IAdConsent Consent { get; internal set; }
     InterstitialAd Interstitial { get; internal set; }
     RewardedInterstitialAd RewardedInterstitial { get; internal set; }
