@@ -26,14 +26,13 @@ internal sealed class AdConsentAndroid : AdLoadCallback, IAdConsent, IConsentInf
     public bool IsInitialized => _isInitialized;
 
     public bool CanShowAds => _options.SkipConsent ||
-                              (_consentInformation.ConsentStatus is ConsentInformationConsentStatus.Obtained
-                                  or ConsentInformationConsentStatus.NotRequired && CanShowAdsInternal());
+                              _consentInformation.ConsentStatus is ConsentInformationConsentStatus.NotRequired ||
+                              (_consentInformation.ConsentStatus is ConsentInformationConsentStatus.Obtained && CanShowAdsInternal());
 
     public bool CanShowPersonalizedAds => _options.SkipConsent ||
-                                          (_consentInformation.ConsentStatus is ConsentInformationConsentStatus.Obtained
-                                               or ConsentInformationConsentStatus.NotRequired &&
-                                           CanShowPersonalizedAdsInternal());
-    
+                                          _consentInformation.ConsentStatus is ConsentInformationConsentStatus.NotRequired ||
+                                          (_consentInformation.ConsentStatus is ConsentInformationConsentStatus.Obtained && CanShowPersonalizedAdsInternal());
+
     public AdConsentAndroid(Activity activity, AdMobOptions options)
     {
         _activity = activity;
@@ -90,13 +89,14 @@ internal sealed class AdConsentAndroid : AdLoadCallback, IAdConsent, IConsentInf
 
     public void ShowConsent()
     {
-        if (_consentInformation.PrivacyOptionsRequirementStatus ==
-            ConsentInformationPrivacyOptionsRequirementStatus.Required)
-        {
-            UserMessagingPlatform.LoadAndShowConsentFormIfRequired(_activity, this);
-            // TODO investigate why this isn't working
-            //UserMessagingPlatform.LoadConsentForm(_activity, this, this);
-        }
+        // below method must be called without checking consent requirement,
+        // the method will show the form only if the consent is required,
+        // and will always fire OnConsentProvided event,
+        // which is necessary for ads to be requested at non-GDPR countries,
+        // since CanShowAds property is false at CreateControl() during the first launch of app.
+        UserMessagingPlatform.LoadAndShowConsentFormIfRequired(_activity, this);
+        // TODO investigate why this isn't working
+        //UserMessagingPlatform.LoadConsentForm(_activity, this, this);
     }
     
     public void ShowPrivacyOptions()

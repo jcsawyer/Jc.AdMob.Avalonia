@@ -22,13 +22,13 @@ internal sealed class AdConsentiOS : IAdConsent
     public bool IsInitialized => _isInitialized;
 
     public bool CanShowAds => _options.SkipConsent ||
-                              (ConsentInformation.SharedInstance?.ConsentStatus is ConsentStatus.Obtained
-                                  or ConsentStatus.NotRequired && CanShowAdsInternal());
+                              ConsentInformation.SharedInstance?.ConsentStatus is ConsentStatus.NotRequired ||
+                              (ConsentInformation.SharedInstance?.ConsentStatus is ConsentStatus.Obtained && CanShowAdsInternal());
 
     public bool CanShowPersonalizedAds => _attStatus == ATTrackingManagerAuthorizationStatus.Authorized &&
                                           (_options.SkipConsent ||
-                                           (ConsentInformation.SharedInstance?.ConsentStatus is ConsentStatus.Obtained
-                                               or ConsentStatus.NotRequired && CanShowPersonalizedAdsInternal()));
+                                          ConsentInformation.SharedInstance?.ConsentStatus is ConsentStatus.NotRequired ||
+                                          (ConsentInformation.SharedInstance?.ConsentStatus is ConsentStatus.Obtained && CanShowPersonalizedAdsInternal()));
 
     public AdConsentiOS(AdMobOptions options)
     {
