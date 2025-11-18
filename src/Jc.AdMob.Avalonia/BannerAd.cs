@@ -1,4 +1,5 @@
 ﻿using System;
+using Avalonia.Automation.Peers;
 using Avalonia.Controls;
 using Avalonia.Platform;
 
@@ -29,7 +30,10 @@ public sealed class BannerAd : NativeControlHost
         return Implementation?.CreateControl(UnitId, this, parent, () => base.CreateNativeControlCore(parent))
                ?? base.CreateNativeControlCore(parent);
     }
-    
+
+    protected override AutomationPeer OnCreateAutomationPeer()
+        => new AdMobAutomationPeer(this);
+
     internal void AdLoaded(object? sender, EventArgs e) => OnAdLoaded?.Invoke(sender, e);
     internal void AdFailedToLoad(object? sender, AdError e) => OnAdFailedToLoad?.Invoke(sender, e);
     internal void AdImpression(object? sender, EventArgs e) => OnAdImpression?.Invoke(sender, e);
