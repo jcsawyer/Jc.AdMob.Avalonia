@@ -79,6 +79,24 @@ For iOS projects, from `v11.13.0`, you must add the following to your csproj fil
 </Target>
 ```
 
+You must also ensure that the `SupportedOSPlatformVersion` attribute is set to `15.0` or higher in your project file:
+
+```xml
+<PropertyGroup>
+    <TargetFramework>net9.0-ios</TargetFramework>
+    <SupportedOSPlatformVersion>15.0</SupportedOSPlatformVersion>
+</PropertyGroup>
+```
+
+along with setting it in the Info.plist:
+
+```
+<key>MinimumOSVersion</key>
+<string>15.0</string>
+```
+
+Failing to set this will result in a compiler warning.
+
 ### Test Devices
 
 To configure test devices, the `.UseAdMob()` method accepts a collection of test device ids.
