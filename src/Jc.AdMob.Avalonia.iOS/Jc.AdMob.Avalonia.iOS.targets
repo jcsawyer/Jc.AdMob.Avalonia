@@ -6,8 +6,8 @@
 
 
     <!-- Fail the build if the consumer targets < iOS 15 -->
-        <Target Name="CheckIosVersion" BeforeTargets="Build">
-            <Error Condition="$(TargetFramework.StartsWith('net9.0-ios')) AND '$(_IosVersionNumber)' &lt; 15 "
+        <Target Name="CheckIosVersion" BeforeTargets="Build" Condition="$(TargetPlatformIdentifier) == 'ios'">
+            <Warning Condition="'$(SupportedOSPlatformVersion)' != '' and $(TargetPlatformVersion) != '' and $([MSBuild]::VersionLessThan($(SupportedOSPlatformVersion), 15))"
                    Text="Jc.AdMob.Avalonia.iOS requires a minimum SupportedOSPlatformVersion of 15.0. Update your project to target iOS 15 or later." />
         </Target>
 </Project>
