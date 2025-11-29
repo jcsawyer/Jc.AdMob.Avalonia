@@ -13,6 +13,7 @@
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <RepositoryUrl>https://github.com/jcsawyer/Jc.AdMob.Avalonia/tree/main</RepositoryUrl>
         <PackageReadmeFile>README.md</PackageReadmeFile>
+        <SupportedOSPlatformVersion>15.0</SupportedOSPlatformVersion>
     </PropertyGroup>
 
     <ItemGroup>
@@ -29,5 +30,6 @@
     <ItemGroup>
         <None Include="..\..\LICENSE" Pack="true" PackagePath="" />
         <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+        <None Include="Jc.AdMob.Avalonia.iOS.targets" Pack="true" PackagePath="buildTransitive" />
     </ItemGroup>
 </Project>
