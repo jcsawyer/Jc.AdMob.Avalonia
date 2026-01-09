@@ -18,7 +18,7 @@
         <PackageReference Include="Avalonia" Version="$(AvaloniaVersion)" />
         <PackageReference Include="Avalonia.Android" Version="$(AvaloniaVersion)" />
         <PackageReference Include="Xamarin.Google.UserMessagingPlatform" Version="4.0.0" />
-        <PackageReference Include="Xamarin.GooglePlayServices.Ads.Lite" Version="124.0.0.3" />
+        <PackageReference Include="Xamarin.GooglePlayServices.Ads.Lite" Version="124.0.0.4" />
     </ItemGroup>
 
     <ItemGroup>
