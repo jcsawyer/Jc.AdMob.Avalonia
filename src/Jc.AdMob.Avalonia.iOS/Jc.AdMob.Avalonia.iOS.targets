@@ -1,7 +1,7 @@
 <Project>
     <PropertyGroup>
         <!-- Make sure SupportedOSPlatformVersion is set somewhere in your library -->
-        <_IosVersionNumber>$([System.Double]::Parse($(SupportedOSPlatformVersion)))</_IosVersionNumber>
+        <_IosVersionNumber Condition="$(TargetPlatformIdentifier) == 'ios'">$([System.Version]::Parse($(SupportedOSPlatformVersion)))</_IosVersionNumber>
     </PropertyGroup>
 
 
