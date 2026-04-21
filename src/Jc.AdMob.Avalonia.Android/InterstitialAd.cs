@@ -6,8 +6,6 @@ public sealed class InterstitialAd : IInterstitialAd
 {
     private const string TestUnit = "ca-app-pub-3940256099942544/1033173712";
 
-    internal static Activity? Activity { get; set; }
-
     private readonly AdMobOptions? _options;
     private readonly string? _unitId;
     private IReadOnlyCollection<string>? _testDeviceIds;
@@ -64,6 +62,13 @@ public sealed class InterstitialAd : IInterstitialAd
             return;
         }
 
+        var activity = ActivityProvider.CurrentActivity;
+        if (activity is null)
+        {
+            OnAdFailedToPresent?.Invoke(this, new AdError("No active Activity is available to present the ad."));
+            return;
+        }
+
         var listener = new FullScreenContentCallback();
 
         listener.AdPresented += (s, _) => OnAdPresented?.Invoke(s, EventArgs.Empty);
@@ -73,7 +78,7 @@ public sealed class InterstitialAd : IInterstitialAd
         listener.AdClosed += (s, _) => OnAdClosed?.Invoke(s, EventArgs.Empty);
 
         _ad.FullScreenContentCallback = listener;
-        _ad.Show(Activity);
+        _ad.Show(activity);
     }
 
     private void AdLoaded(object? sender, global::Android.Gms.Ads.Interstitial.InterstitialAd? interstitialAd)

@@ -7,8 +7,6 @@ public sealed class RewardedInterstitialAd : IRewardedInterstitialAd
 {
     private const string TestUnit = "ca-app-pub-3940256099942544/5354046379";
 
-    internal static Activity? Activity { get; set; }
-
     private readonly AdMobOptions? _options;
     private readonly string? _unitId;
     private IReadOnlyCollection<string>? _testDeviceIds;
@@ -57,7 +55,7 @@ public sealed class RewardedInterstitialAd : IRewardedInterstitialAd
             _callbacks.WhenAdFailedToLoad += (s, e) => OnAdFailedToLoad?.Invoke(s, new AdError(e.Message));
             _callbacks.WhenUserEarnedReward += (s, e) => OnUserEarnedReward?.Invoke(s, new RewardItem(e.Amount, e.Type));
             
-            global::Android.Gms.Ads.RewardedInterstitial.RewardedInterstitialAd.Load(Activity,
+            global::Android.Gms.Ads.RewardedInterstitial.RewardedInterstitialAd.Load(global::Android.App.Application.Context,
                 string.IsNullOrWhiteSpace(_unitId) ? TestUnit : _unitId, adRequest, _callbacks);
         }
     }
@@ -72,8 +70,15 @@ public sealed class RewardedInterstitialAd : IRewardedInterstitialAd
 
     public void Show()
     {
-        if (!_hasLoaded || _ad is null)
+        if (!_hasLoaded || _ad is null || _callbacks is null)
         {
+            return;
+        }
+
+        var activity = ActivityProvider.CurrentActivity;
+        if (activity is null)
+        {
+            OnAdFailedToPresent?.Invoke(this, new AdError("No active Activity is available to present the ad."));
             return;
         }
         
@@ -86,6 +91,6 @@ public sealed class RewardedInterstitialAd : IRewardedInterstitialAd
         listener.AdClosed += (s, _) => OnAdClosed?.Invoke(s, EventArgs.Empty);
 
         _ad.FullScreenContentCallback = listener;
-        _ad.Show(Activity, _callbacks);
+        _ad.Show(activity, _callbacks);
     }
 }

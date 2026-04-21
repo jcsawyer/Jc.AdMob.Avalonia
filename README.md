@@ -217,14 +217,14 @@ private void ShowInterstitialAd()
 
 #### Android
 
-When using interstitial ads on Android, the `Activity` must be passed into the `.AddAdMob()` call:
+For Android on Avalonia 12+, no `Activity` is passed into `.UseAdMob()`. The library resolves the current `Activity` from lifecycle callbacks:
 
 ```c#
 protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
 {
     return base.CustomizeAppBuilder(builder)
         ...
-        .UseAdMob(this, adMobOptions);
+        .UseAdMob(adMobOptions);
 }
 ```
 
@@ -270,14 +270,14 @@ private void ShowRewardedInterstitialAd()
 
 #### Android
 
-When using interstitial ads on Android, the `Activity` must be passed into the `.AddAdMob()` call:
+For Android on Avalonia 12+, no `Activity` is passed into `.UseAdMob()`. The library resolves the current `Activity` from lifecycle callbacks:
 
 ```c#
 protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
 {
     return base.CustomizeAppBuilder(builder)
         ...
-        .UseAdMob(this, adMobOptions);
+        .UseAdMob(adMobOptions);
 }
 ```
 
@@ -333,14 +333,14 @@ private void ShowRewardedAd()
 
 #### Android
 
-When using rewarded ads on Android, the `Activity` must be passed into the `.AddAdMob()` call:
+For Android on Avalonia 12+, no `Activity` is passed into `.UseAdMob()`. The library resolves the current `Activity` from lifecycle callbacks:
 
 ```c#
 protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
 {
     return base.CustomizeAppBuilder(builder)
         ...
-        .UseAdMob(this, adMobOptions);
+        .UseAdMob(adMobOptions);
 }
 ```
 
@@ -384,14 +384,14 @@ private void ShowAppOpenAd()
 
 #### Android
 
-When using app open ads on Android, the `Activity` must be passed into the `.AddAdMob()` call:
+For Android on Avalonia 12+, no `Activity` is passed into `.UseAdMob()`. The library resolves the current `Activity` from lifecycle callbacks:
 
 ```c#
 protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
 {
     return base.CustomizeAppBuilder(builder)
         ...
-        .UseAdMob(this, adMobOptions);
+        .UseAdMob(adMobOptions);
 }
 ```
 
@@ -447,4 +447,57 @@ Try adding the following to your `Info.plist`:
 
 ## Avalonia 12.x Migration
 
-Coming soon...
+If you are migrating an existing Avalonia 11 project, there are several required changes.
+
+### Update to Jc.AdMob.Avalonia >=5.x.x
+
+The 5.0.0 release adds support for Avalonia 12.
+
+### Android Changes
+
+Avalonia 12 changed Android startup. Your main activity must inherit from the non-generic `AvaloniaMainActivity`, and your app class must inherit from `AvaloniaAndroidApplication<TApp>`.
+
+```c#
+[Application]
+public class AndroidApp : AvaloniaAndroidApplication<App>
+{
+    protected AndroidApp(IntPtr javaReference, JniHandleOwnership transfer)
+        : base(javaReference, transfer)
+    {
+    }
+
+    protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
+    {
+        return base.CustomizeAppBuilder(builder)
+            ...
+            .UseAdMob(new AdMobOptions
+            {
+                TestDeviceIds = [],
+                TagForUnderAgeOfConsent = false,
+                TagForChildDirectedTreatment = false,
+                AppId = "{YOUR_ADMOB_APP_ID}",
+            });
+    }
+}
+
+[Activity(...)]
+public class MainActivity : AvaloniaMainActivity
+{
+}
+```
+
+### 2) `UseAdMob` no longer takes `Activity` on Android
+
+For Avalonia 12, call:
+
+```c#
+.UseAdMob(adMobOptions)
+```
+
+instead of:
+
+```c#
+.UseAdMob(this, adMobOptions)
+```
+
+The library now resolves the current Android `Activity` from lifecycle callbacks internally for fullscreen ad types and consent flows.

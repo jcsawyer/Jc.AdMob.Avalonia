@@ -1,3 +1,4 @@
+using Android.App;
 using Android.Gms.Ads;
 using Android.Gms.Ads.Initialization;
 using Android.Preferences;
@@ -9,7 +10,6 @@ internal sealed class AdConsentAndroid : AdLoadCallback, IAdConsent, IConsentInf
 {
     private const int GoogleId = 755;
     private readonly AdMobOptions _options;
-    private readonly Activity _activity;
 
     public event EventHandler? OnConsentInitialized;
     public event EventHandler<AdError>? OnConsentFailedToInitialize;
@@ -20,37 +20,66 @@ internal sealed class AdConsentAndroid : AdLoadCallback, IAdConsent, IConsentInf
     public event EventHandler? OnConsentProvided;
 
     private bool _isInitialized;
+    private bool _isConsentInfoUpdatePending;
 
-    private IConsentInformation _consentInformation;
+    private IConsentInformation? _consentInformation;
 
     public bool IsInitialized => _isInitialized;
 
     public bool CanShowAds => _options.SkipConsent ||
-                              _consentInformation.ConsentStatus is ConsentInformationConsentStatus.NotRequired ||
-                              (_consentInformation.ConsentStatus is ConsentInformationConsentStatus.Obtained && CanShowAdsInternal());
+                              _consentInformation?.ConsentStatus is ConsentInformationConsentStatus.NotRequired ||
+                              (_consentInformation?.ConsentStatus is ConsentInformationConsentStatus.Obtained && CanShowAdsInternal());
 
     public bool CanShowPersonalizedAds => _options.SkipConsent ||
-                                          _consentInformation.ConsentStatus is ConsentInformationConsentStatus.NotRequired ||
-                                          (_consentInformation.ConsentStatus is ConsentInformationConsentStatus.Obtained && CanShowPersonalizedAdsInternal());
+                                          _consentInformation?.ConsentStatus is ConsentInformationConsentStatus.NotRequired ||
+                                          (_consentInformation?.ConsentStatus is ConsentInformationConsentStatus.Obtained && CanShowPersonalizedAdsInternal());
 
-    public AdConsentAndroid(Activity activity, AdMobOptions options)
+    public AdConsentAndroid(AdMobOptions options)
     {
-        _activity = activity;
         _options = options;
     }
 
     public void Initialize()
     {
+        if (TryGetActivity(out var activity))
+        {
+            Initialize(activity);
+            return;
+        }
+
+        if (_isConsentInfoUpdatePending)
+        {
+            return;
+        }
+
+        _isConsentInfoUpdatePending = true;
+        ActivityProvider.ActivityChanged += OnActivityChanged;
+    }
+
+    private void OnActivityChanged(object? sender, Activity activity)
+    {
+        if (!_isConsentInfoUpdatePending)
+        {
+            return;
+        }
+
+        _isConsentInfoUpdatePending = false;
+        ActivityProvider.ActivityChanged -= OnActivityChanged;
+        Initialize(activity);
+    }
+
+    private void Initialize(Activity activity)
+    {
         try
         {
-            var consentInformation = UserMessagingPlatform.GetConsentInformation(_activity);
+            var consentInformation = UserMessagingPlatform.GetConsentInformation(activity);
             if (_options.SkipConsent || consentInformation.ConsentStatus is ConsentInformationConsentStatus.NotRequired)
             {
-                InitializeAds();
+                InitializeAds(activity);
                 return;
             }
 
-            var builder = new ConsentDebugSettings.Builder(_activity);
+            var builder = new ConsentDebugSettings.Builder(activity);
             if (_options.TestDeviceIds is not null)
             {
                 foreach (var testDeviceId in _options.TestDeviceIds)
@@ -71,7 +100,7 @@ internal sealed class AdConsentAndroid : AdLoadCallback, IAdConsent, IConsentInf
                 .SetAdMobAppId(_options.AppId)
                 .Build();
 
-            consentInformation.RequestConsentInfoUpdate(_activity, requestParameters, this, this);
+            consentInformation.RequestConsentInfoUpdate(activity, requestParameters, this, this);
             _consentInformation = consentInformation;
         
         }
@@ -83,31 +112,49 @@ internal sealed class AdConsentAndroid : AdLoadCallback, IAdConsent, IConsentInf
 
     public void Reset()
     {
-        UserMessagingPlatform.GetConsentInformation(_activity).Reset();
+        if (!TryGetActivity(out var activity))
+        {
+            OnConsentFailedToInitialize?.Invoke(this, new AdError("No active Activity is available for consent reset."));
+            return;
+        }
+
+        UserMessagingPlatform.GetConsentInformation(activity).Reset();
         Initialize();
     }
 
     public void ShowConsent()
     {
+        if (!TryGetActivity(out var activity))
+        {
+            OnConsentFormFailedToPresent?.Invoke(this, new AdError("No active Activity is available to show the consent form."));
+            return;
+        }
+
         // below method must be called without checking consent requirement,
         // the method will show the form only if the consent is required,
         // and will always fire OnConsentProvided event,
         // which is necessary for ads to be requested at non-GDPR countries,
         // since CanShowAds property is false at CreateControl() during the first launch of app.
-        UserMessagingPlatform.LoadAndShowConsentFormIfRequired(_activity, this);
+        UserMessagingPlatform.LoadAndShowConsentFormIfRequired(activity, this);
         // TODO investigate why this isn't working
-        //UserMessagingPlatform.LoadConsentForm(_activity, this, this);
+        //UserMessagingPlatform.LoadConsentForm(activity, this, this);
     }
     
     public void ShowPrivacyOptions()
     {
-        UserMessagingPlatform.LoadConsentForm(_activity, this, this);
+        if (!TryGetActivity(out var activity))
+        {
+            OnConsentFormFailedToPresent?.Invoke(this, new AdError("No active Activity is available to show privacy options."));
+            return;
+        }
+
+        UserMessagingPlatform.LoadConsentForm(activity, this, this);
     }
 
-    private void InitializeAds()
+    private void InitializeAds(Activity activity)
     {
         OnConsentFormClosed?.Invoke(this, EventArgs.Empty);
-        MobileAds.Initialize(_activity, this);
+        MobileAds.Initialize(activity, this);
     }
 
     public void OnConsentFormLoadFailure(FormError error)
@@ -117,8 +164,14 @@ internal sealed class AdConsentAndroid : AdLoadCallback, IAdConsent, IConsentInf
 
     public void OnConsentFormLoadSuccess(IConsentForm consentForm)
     {
+        if (!TryGetActivity(out var activity))
+        {
+            OnConsentFormFailedToPresent?.Invoke(this, new AdError("No active Activity is available to show privacy options."));
+            return;
+        }
+
         OnConsentFormLoaded?.Invoke(this, EventArgs.Empty);
-        UserMessagingPlatform.ShowPrivacyOptionsForm(_activity, this);
+        UserMessagingPlatform.ShowPrivacyOptionsForm(activity, this);
     }
 
     public void OnConsentFormDismissed(FormError? error)
@@ -129,8 +182,14 @@ internal sealed class AdConsentAndroid : AdLoadCallback, IAdConsent, IConsentInf
             return;
         }
 
-        _consentInformation = UserMessagingPlatform.GetConsentInformation(_activity);
-        InitializeAds();
+        if (!TryGetActivity(out var activity))
+        {
+            OnConsentFormFailedToPresent?.Invoke(this, new AdError("No active Activity is available to complete consent flow."));
+            return;
+        }
+
+        _consentInformation = UserMessagingPlatform.GetConsentInformation(activity);
+        InitializeAds(activity);
     }
 
     public void OnInitializationComplete(IInitializationStatus status)
@@ -157,7 +216,12 @@ internal sealed class AdConsentAndroid : AdLoadCallback, IAdConsent, IConsentInf
 
     private bool CanShowAdsInternal()
     {
-        var userPreferences = PreferenceManager.GetDefaultSharedPreferences(_activity);
+        if (!TryGetActivity(out var activity))
+        {
+            return false;
+        }
+
+        var userPreferences = PreferenceManager.GetDefaultSharedPreferences(activity);
         var purposeConsent = userPreferences.GetString("IABTCF_PurposeConsents", "");
         var vendorConsent = userPreferences.GetString("IABTCF_VendorConsents", "");
         var vendorLi = userPreferences.GetString("IABTCF_VendorLegitimateInterests", "");
@@ -176,7 +240,12 @@ internal sealed class AdConsentAndroid : AdLoadCallback, IAdConsent, IConsentInf
 
     private bool CanShowPersonalizedAdsInternal()
     {
-        var userPreferences = PreferenceManager.GetDefaultSharedPreferences(_activity);
+        if (!TryGetActivity(out var activity))
+        {
+            return false;
+        }
+
+        var userPreferences = PreferenceManager.GetDefaultSharedPreferences(activity);
         var purposeConsent = userPreferences.GetString("IABTCF_PurposeConsents", "");
         var vendorConsent = userPreferences.GetString("IABTCF_VendorConsents", "");
         var vendorLi = userPreferences.GetString("IABTCF_VendorLegitimateInterests", "");
@@ -214,5 +283,18 @@ internal sealed class AdConsentAndroid : AdLoadCallback, IAdConsent, IConsentInf
     {
         return indexes.TrueForAll(p =>
             (HasAttribute(purposeLi, p) && hasVendorLi) || (HasAttribute(purposeConsent, p) && hasVendorConsent));
+    }
+
+    private static bool TryGetActivity(out Activity activity)
+    {
+        var currentActivity = ActivityProvider.CurrentActivity;
+        if (currentActivity is null)
+        {
+            activity = null!;
+            return false;
+        }
+
+        activity = currentActivity;
+        return true;
     }
 }
