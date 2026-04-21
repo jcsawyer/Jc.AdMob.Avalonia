@@ -4,23 +4,26 @@ namespace Jc.AdMob.Avalonia.Android;
 
 public static class AppBuilderExtensions
 {
-    public static AppBuilder UseAdMob(this AppBuilder appBuilder, Activity activity, AdMobOptions options)
+    public static AppBuilder UseAdMob(this AppBuilder appBuilder, AdMobOptions options)
     {
         return appBuilder.AfterSetup(_ =>
         {
+            if (global::Android.App.Application.Context is not global::Android.App.Application application)
+            {
+                throw new InvalidOperationException("Android application context is unavailable.");
+            }
+
+            ActivityProvider.Initialize(application);
+
             AdMob.Current.AppOpen = new Avalonia.AppOpenAd();
-            AdMob.Current.Consent = new AdConsentAndroid(activity, options);
+            AdMob.Current.Consent = new AdConsentAndroid(options);
             AdMob.Current.Interstitial = new Avalonia.InterstitialAd();
             AdMob.Current.RewardedInterstitial = new Avalonia.RewardedInterstitialAd();
             AdMob.Current.Rewarded = new Avalonia.RewardedAd();
             
-            AppOpenAd.Activity = activity;
             Avalonia.AppOpenAd.ImplementationFactory = (unitId) => new AppOpenAd(options, unitId);
-            InterstitialAd.Activity = activity;
             Avalonia.InterstitialAd.ImplementationFactory = (unitId) => new InterstitialAd(options, unitId);
-            RewardedInterstitialAd.Activity = activity;
             Avalonia.RewardedInterstitialAd.ImplementationFactory = (unitId) => new RewardedInterstitialAd(options, unitId);
-            RewardedAd.Activity = activity;
             Avalonia.RewardedAd.ImplementationFactory = (unitId) => new RewardedAd(options, unitId);
             
             BannerAd.Implementation = new BannerAdAndroid(options);

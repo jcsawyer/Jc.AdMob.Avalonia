@@ -6,8 +6,6 @@ public class AppOpenAd : IAppOpenAd
 {
     private const string TestUnit = "ca-app-pub-3940256099942544/9257395921";
     
-    internal static Activity? Activity { get; set; }
-    
     private readonly AdMobOptions? _options;
     private readonly string? _unitId;
     private bool _hasLoaded;
@@ -62,6 +60,13 @@ public class AppOpenAd : IAppOpenAd
             return;
         }
 
+        var activity = ActivityProvider.CurrentActivity;
+        if (activity is null)
+        {
+            OnAdFailedToPresent?.Invoke(this, new AdError("No active Activity is available to present the ad."));
+            return;
+        }
+
         var listener = new FullScreenContentCallback();
         listener.AdPresented += (s, e) => OnAdPresented?.Invoke(this, EventArgs.Empty);
         listener.AdFailedToPresent += (s, e) => OnAdFailedToPresent?.Invoke(this, new AdError(e.Message));
@@ -70,7 +75,7 @@ public class AppOpenAd : IAppOpenAd
         listener.AdClosed += (s, e) => OnAdClosed?.Invoke(this, EventArgs.Empty);
         
         _ad.FullScreenContentCallback = listener;
-        _ad.Show(Activity);
+        _ad.Show(activity);
     }
     
     private void AdLoaded(object? sender, global::Android.Gms.Ads.AppOpen.AppOpenAd appOpenAd)

@@ -1,8 +1,8 @@
 using Foundation;
 using Avalonia;
 using Avalonia.iOS;
-using Avalonia.ReactiveUI;
 using Jc.AdMob.Avalonia.iOS;
+using ReactiveUI.Avalonia;
 
 namespace Jc.AdMob.Avalonia.Sample.iOS;
 
@@ -18,7 +18,7 @@ public partial class AppDelegate : AvaloniaAppDelegate<App>
     {
         return base.CustomizeAppBuilder(builder)
             .WithInterFont()
-            .UseReactiveUI()
+            .UseReactiveUI(_ => { })
             .UseAdMob(new AdMobOptions
             {
                 TestDeviceIds = [],

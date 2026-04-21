@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFramework>net9.0-ios</TargetFramework>
+        <TargetFramework>net10.0-ios</TargetFramework>
         <RuntimeIdentifiers>ios-arm64;iossimulator-x64</RuntimeIdentifiers>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
@@ -19,7 +19,7 @@
     <ItemGroup>
         <PackageReference Include="Avalonia" Version="$(AvaloniaVersion)" />
         <PackageReference Include="Avalonia.iOS" Version="$(AvaloniaVersion)" />
-        <PackageReference Include="Jc.GMA.iOS" Version="12.7.1" />
+        <PackageReference Include="Jc.GMA.iOS" Version="12.7.2" />
         <PackageReference Include="Jc.UMP.iOS" Version="2.7.5" />
     </ItemGroup>
 
