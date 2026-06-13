@@ -6,6 +6,19 @@ public static class AppBuilderExtensions
 {
     public static AppBuilder UseAdMob(this AppBuilder appBuilder, AdMobOptions options)
     {
+        AdMob.Current.AppOpen = new Avalonia.AppOpenAd();
+        AdMob.Current.Consent = new AdConsentAndroid(options);
+        AdMob.Current.Interstitial = new Avalonia.InterstitialAd();
+        AdMob.Current.RewardedInterstitial = new Avalonia.RewardedInterstitialAd();
+        AdMob.Current.Rewarded = new Avalonia.RewardedAd();
+
+        Avalonia.AppOpenAd.ImplementationFactory = unitId => new AppOpenAd(options, unitId);
+        Avalonia.InterstitialAd.ImplementationFactory = unitId => new InterstitialAd(options, unitId);
+        Avalonia.RewardedInterstitialAd.ImplementationFactory = unitId => new RewardedInterstitialAd(options, unitId);
+        Avalonia.RewardedAd.ImplementationFactory = unitId => new RewardedAd(options, unitId);
+
+        BannerAd.Implementation = new BannerAdAndroid(options);
+
         return appBuilder.AfterSetup(_ =>
         {
             if (global::Android.App.Application.Context is not global::Android.App.Application application)
@@ -14,19 +27,6 @@ public static class AppBuilderExtensions
             }
 
             ActivityProvider.Initialize(application);
-
-            AdMob.Current.AppOpen = new Avalonia.AppOpenAd();
-            AdMob.Current.Consent = new AdConsentAndroid(options);
-            AdMob.Current.Interstitial = new Avalonia.InterstitialAd();
-            AdMob.Current.RewardedInterstitial = new Avalonia.RewardedInterstitialAd();
-            AdMob.Current.Rewarded = new Avalonia.RewardedAd();
-            
-            Avalonia.AppOpenAd.ImplementationFactory = (unitId) => new AppOpenAd(options, unitId);
-            Avalonia.InterstitialAd.ImplementationFactory = (unitId) => new InterstitialAd(options, unitId);
-            Avalonia.RewardedInterstitialAd.ImplementationFactory = (unitId) => new RewardedInterstitialAd(options, unitId);
-            Avalonia.RewardedAd.ImplementationFactory = (unitId) => new RewardedAd(options, unitId);
-            
-            BannerAd.Implementation = new BannerAdAndroid(options);
             
             AdMob.Current.Initialize(options);
         });

@@ -28,6 +28,10 @@ public class AndroidApp : AvaloniaAndroidApplication<App>
                 TagForUnderAgeOfConsent = false,
                 TagForChildDirectedTreatment = false,
                 AppId = "ca-app-pub-9127086931863581~2923947432",
+            })
+            .AfterSetup(_ =>
+            {
+                AdMob.Current.Consent.OnConsentInitialized += (_, _) => AdMob.Current.Consent.ShowConsent();
             });
     }
 }

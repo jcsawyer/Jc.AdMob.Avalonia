@@ -10,8 +10,22 @@ internal sealed class AdConsentAndroid : AdLoadCallback, IAdConsent, IConsentInf
 {
     private const int GoogleId = 755;
     private readonly AdMobOptions _options;
+    private EventHandler? _onConsentInitialized;
 
-    public event EventHandler? OnConsentInitialized;
+    public event EventHandler? OnConsentInitialized
+    {
+        add
+        {
+            if (_isInitialized)
+            {
+                value?.Invoke(this, EventArgs.Empty);
+                return;
+            }
+
+            _onConsentInitialized += value;
+        }
+        remove => _onConsentInitialized -= value;
+    }
     public event EventHandler<AdError>? OnConsentFailedToInitialize;
     public event EventHandler? OnConsentFormLoaded;
     public event EventHandler<AdError>? OnConsentFormFailedToLoad;
@@ -210,8 +224,8 @@ internal sealed class AdConsentAndroid : AdLoadCallback, IAdConsent, IConsentInf
 
     public void OnConsentInfoUpdateSuccess()
     {
-        OnConsentInitialized?.Invoke(this, EventArgs.Empty);
         _isInitialized = true;
+        _onConsentInitialized?.Invoke(this, EventArgs.Empty);
     }
 
     private bool CanShowAdsInternal()
