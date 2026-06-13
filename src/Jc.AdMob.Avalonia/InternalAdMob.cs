@@ -5,8 +5,23 @@ namespace Jc.AdMob.Avalonia;
 internal sealed class InternalAdMob : IAdMob
 {
     private AdMobOptions _options;
+    private EventHandler? _onAdsInitialized;
+    private bool _adsInitialized;
     
-    public event EventHandler? OnAdsInitialized;
+    public event EventHandler? OnAdsInitialized
+    {
+        add
+        {
+            if (_adsInitialized)
+            {
+                value?.Invoke(this, EventArgs.Empty);
+                return;
+            }
+
+            _onAdsInitialized += value;
+        }
+        remove => _onAdsInitialized -= value;
+    }
     
     public AppOpenAd AppOpen { get; set; }
     
@@ -30,6 +45,7 @@ internal sealed class InternalAdMob : IAdMob
 
     public void AdsInitialized()
     {
-        OnAdsInitialized?.Invoke(this, EventArgs.Empty);
+        _adsInitialized = true;
+        _onAdsInitialized?.Invoke(this, EventArgs.Empty);
     }
 }

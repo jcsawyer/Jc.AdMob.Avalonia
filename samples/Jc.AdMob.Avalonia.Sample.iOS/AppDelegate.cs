@@ -24,6 +24,10 @@ public partial class AppDelegate : AvaloniaAppDelegate<App>
                 TestDeviceIds = [],
                 TagForUnderAgeOfConsent = false,
                 TagForChildDirectedTreatment = false,
+            })
+            .AfterSetup(_ =>
+            {
+                AdMob.Current.Consent.OnConsentInitialized += (_, _) => AdMob.Current.Consent.ShowConsent();
             });
     }
 }

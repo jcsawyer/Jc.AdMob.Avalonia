@@ -52,6 +52,10 @@ protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
             TestDeviceIds = [],
             TagForUnderAgeOfConsent = false,
             TagForChildDirectedTreatment = false,
+        })
+        .AfterSetup(_ =>
+        {
+            AdMob.Current.Consent.OnConsentInitialized += (_, _) => AdMob.Current.Consent.ShowConsent();
         });
 }
 ```
@@ -126,17 +130,23 @@ return base.CustomizeAppBuilder(builder)
 
 When using the consent service, all services are accessed via the singleton `AdMob.Current`.
 
-To enable ads in regions where consent is required, you must show the consent dialog once consent is initialized:
+Call `.UseAdMob(...)` before any app-level `.AfterSetup(...)` that interacts with `AdMob.Current`. The consent and ads initialized events are readiness events, so subscribing after initialization has completed will invoke the handler immediately.
+
+To enable ads in regions where consent is required, show the consent dialog once consent is initialized:
 
 ```c#
-AdMob.Current.Consent.OnConsentInitialized += (_, _) => AdMob.Current.Consent.ShowConsent();
+.UseAdMob(adMobOptions)
+.AfterSetup(_ =>
+{
+    AdMob.Current.Consent.OnConsentInitialized += (_, _) => AdMob.Current.Consent.ShowConsent();
+});
 ```
 
 #### Events
 
 | Event                        | Notes                                         |
 | ---------------------------- | --------------------------------------------- |
-| OnConsentInitialized         |                                               |
+| OnConsentInitialized         | Replayed for late subscribers after init      |
 | OnConsentFailedToInitialize  |                                               |
 | OnConsentFormLoaded          | iOS only - issue being investigated           |
 | OnConsentFormFailedToLoad    | iOS only - issue being investigated           |
@@ -476,6 +486,10 @@ public class AndroidApp : AvaloniaAndroidApplication<App>
                 TagForUnderAgeOfConsent = false,
                 TagForChildDirectedTreatment = false,
                 AppId = "{YOUR_ADMOB_APP_ID}",
+            })
+            .AfterSetup(_ =>
+            {
+                AdMob.Current.Consent.OnConsentInitialized += (_, _) => AdMob.Current.Consent.ShowConsent();
             });
     }
 }
