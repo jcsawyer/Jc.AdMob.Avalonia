@@ -22,8 +22,8 @@ The library currently supports the following ad units:
 
 |         | Consent | Banner | Interstitial | Rewarded interstitial | Rewarded | Native advanced | App open |
 | ------- | ------- | ------ | ------------ | --------------------- | -------- | --------------- | -------- |
-| Android | ✓       | ✓      | ✓            | ✓                     | ✓        | ☓               | ✓        |
-| iOS     | ✓       | ✓      | ✓            | ✓                     | ✓        | ☓               | ✓        |
+| Android | ✓       | ✓      | ✓            | ✓                     | ✓        | Preview         | ✓        |
+| iOS     | ✓       | ✓      | ✓            | ✓                     | ✓        | Preview         | ✓        |
 
 ## Usage
 
@@ -199,6 +199,56 @@ The banner exposes the following events:
 | OnAdOpened       |              |
 | OnAdClosed       |              |
 | OnAdSwiped       | Android only |
+
+### Native Advanced ads
+
+| Demo | iOS | Android |
+| --- | --- | --- |
+| Image | <img src="img/ios-native-image.png" alt="Native image test ad on iOS" width="250" /> | <img src="img/android-native-image.png" alt="Native image test ad on Android" width="250" /> |
+| Video | <img src="img/ios-native-video.png" alt="Native video test ad with a play button on iOS" width="250" /> | <img src="img/android-native-video.png" alt="Native video test ad playing on Android" width="250" /> |
+
+Define the placement once in AXAML. The same layout runs on Android and iOS after the usual `.UseAdMob(options)` setup.
+
+```xml
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:admob="https://github.com/jc-admob-avalonia">
+    <admob:NativeAdView>
+        <admob:NativeAdView.AdContent>
+            <StackPanel Spacing="8">
+                <admob:NativeAdAttribution />
+                <Grid ColumnDefinitions="Auto,*">
+                    <admob:NativeAdIcon Width="40" Height="40" Margin="0,0,8,0" />
+                    <admob:NativeAdHeadline Grid.Column="1" />
+                </Grid>
+                <admob:NativeAdMedia />
+                <admob:NativeAdBody />
+                <admob:NativeAdCallToAction HorizontalAlignment="Right" />
+            </StackPanel>
+        </admob:NativeAdView.AdContent>
+    </admob:NativeAdView>
+</UserControl>
+```
+
+Use `Grid` and `StackPanel` to arrange the assets. Include one each of `NativeAdAttribution`, `NativeAdHeadline`, `NativeAdIcon`, `NativeAdMedia`, and `NativeAdCallToAction`. You can also include `NativeAdBody` and `NativeAdAdvertiser` once each. Asset controls collapse when their optional asset is absent. Use an `Auto` grid row or column when its space should collapse too.
+
+The attribution defaults to “Ad”. Set `NativeAdAttribution.Text` to a localized equivalent. Leave the top-right corner clear for AdChoices and allow at least 120 × 120 logical units for the media view. Give text room to wrap, and keep other app content outside the ad placement. Google’s SDK handles taps, impressions, AdChoices, and image or video playback. [AdMob layout requirements](https://support.google.com/admob/answer/6329638)
+
+Set `UnitId` to the current platform’s native ad unit for production. An omitted or blank value loads a native demo ad. To test playback, use the [Android native video unit](https://developers.google.com/admob/android/test-ads) or [iOS native video unit](https://developers.google.com/admob/ios/test-ads). In the sample, select **Show Native Image Ad** or **Show Native Video Ad** to open the placement on a separate page. The native sample placements use Google’s demo ad units. Set `App.TestConsentFlow` to `false` to run the demo without the consent prompt. To test consent, enable `App.TestConsentFlow` in the shared sample and use an AdMob app ID with a published consent message in the Android manifest and app options or the iOS Info.plist. Apps using the library still control consent through their own `AdMobOptions`.
+
+The control loads once per native attachment after SDK initialization and consent. Set the layout and unit ID before attachment.  
+
+#### Events
+
+The native ad exposes the following events:
+
+| Event            | Notes        |
+| ---------------- | ------------ |
+| OnAdLoaded       |              |
+| OnAdFailedToLoad |              |
+| OnAdImpression   |              |
+| OnAdClicked      |              |
+| OnAdOpened       |              |
+| OnAdClosed       |              |
 
 ### Interstitial
 

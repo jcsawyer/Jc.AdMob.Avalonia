@@ -25,13 +25,17 @@ public class AndroidApp : AvaloniaAndroidApplication<App>
             .UseAdMob(new AdMobOptions
             {
                 TestDeviceIds = ["00000000-0000-0000-0000-000000000000"],
+                SkipConsent = !App.TestConsentFlow,
                 TagForUnderAgeOfConsent = false,
                 TagForChildDirectedTreatment = false,
                 AppId = "ca-app-pub-9127086931863581~2923947432",
             })
             .AfterSetup(_ =>
             {
-                AdMob.Current.Consent.OnConsentInitialized += (_, _) => AdMob.Current.Consent.ShowConsent();
+                if (App.TestConsentFlow)
+                {
+                    AdMob.Current.Consent.OnConsentInitialized += (_, _) => AdMob.Current.Consent.ShowConsent();
+                }
             });
     }
 }

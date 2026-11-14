@@ -18,6 +18,7 @@ public static class AppBuilderExtensions
         Avalonia.RewardedInterstitialAd.ImplementationFactory = unitId => new RewardedInterstitialAd(options, unitId);
         Avalonia.RewardedAd.ImplementationFactory = unitId => new RewardedAd(options, unitId);
         BannerAd.Implementation = new BannerAdiOS(options);
+        NativeAdView.Implementation = (parent, assets) => new NativeAdViewiOS(parent, assets);
 
         return appBuilder.AfterSetup(_ =>
         {

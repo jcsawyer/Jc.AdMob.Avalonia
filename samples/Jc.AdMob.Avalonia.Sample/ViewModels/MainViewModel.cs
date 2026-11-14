@@ -10,6 +10,8 @@ public class MainViewModel : ViewModelBase
     public string Greeting => "Welcome to Avalonia!";
 #pragma warning restore CA1822 // Mark members as static
 
+    public bool TestConsentFlow => App.TestConsentFlow;
+
     public ICommand ResetConsentCommand { get; }
     public ICommand ShowConsentCommand { get; }
     public ICommand ShowPrivacyCommand  { get; }

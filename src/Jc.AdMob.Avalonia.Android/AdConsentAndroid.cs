@@ -87,6 +87,8 @@ internal sealed class AdConsentAndroid : AdLoadCallback, IAdConsent, IConsentInf
         try
         {
             var consentInformation = UserMessagingPlatform.GetConsentInformation(activity);
+            _consentInformation = consentInformation;
+
             if (_options.SkipConsent || consentInformation.ConsentStatus is ConsentInformationConsentStatus.NotRequired)
             {
                 InitializeAds(activity);
@@ -115,7 +117,6 @@ internal sealed class AdConsentAndroid : AdLoadCallback, IAdConsent, IConsentInf
                 .Build();
 
             consentInformation.RequestConsentInfoUpdate(activity, requestParameters, this, this);
-            _consentInformation = consentInformation;
         
         }
         catch (Exception e)
