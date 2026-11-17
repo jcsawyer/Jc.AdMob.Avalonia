@@ -8,6 +8,9 @@ namespace Jc.AdMob.Avalonia.Sample;
 
 public partial class App : Application
 {
+    // Enable with a configured AdMob app ID to exercise the consent form.
+    public static bool TestConsentFlow => true;
+
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);

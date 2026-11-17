@@ -1,0 +1,48 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:admob="https://github.com/jc-admob-avalonia"
+             x:Class="Jc.AdMob.Avalonia.Sample.Views.NativeAdPage">
+  <Grid RowDefinitions="Auto,*">
+    <StackPanel Margin="16,8" Spacing="12" Orientation="Horizontal">
+      <Button Content="Back" Click="BackClicked" />
+      <TextBlock x:Name="PageTitle" FontWeight="SemiBold" VerticalAlignment="Center" />
+    </StackPanel>
+    <ScrollViewer Grid.Row="1">
+      <StackPanel x:Name="AdPlacement" Margin="16,8" Spacing="8">
+        <TextBlock x:Name="AdStatus" Text="Loading test ad…" TextWrapping="Wrap" />
+        <admob:NativeAdView x:Name="ImageAd" OnAdLoaded="NativeImageLoaded" OnAdFailedToLoad="NativeAdFailed"
+                            OnAdClicked="NativeAdClicked" OnAdImpression="NativeAdImpression">
+          <admob:NativeAdView.AdContent>
+            <StackPanel Spacing="8">
+              <admob:NativeAdAttribution />
+              <Grid ColumnDefinitions="Auto,*">
+                <admob:NativeAdIcon Width="40" Height="40" Margin="0,0,8,0" />
+                <admob:NativeAdHeadline Grid.Column="1" />
+              </Grid>
+              <admob:NativeAdMedia MinHeight="120" />
+              <admob:NativeAdBody />
+              <admob:NativeAdCallToAction HorizontalAlignment="Right" />
+            </StackPanel>
+          </admob:NativeAdView.AdContent>
+        </admob:NativeAdView>
+        <admob:NativeAdView x:Name="VideoAd" OnAdLoaded="NativeVideoLoaded"
+                            OnAdFailedToLoad="NativeAdFailed" OnAdClicked="NativeAdClicked"
+                            OnAdImpression="NativeAdImpression">
+          <admob:NativeAdView.AdContent>
+            <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="8">
+              <admob:NativeAdAttribution Grid.ColumnSpan="2" />
+              <admob:NativeAdIcon Grid.Row="1" Width="48" Height="48" Margin="0,0,8,0" />
+              <StackPanel Grid.Row="1" Grid.Column="1" Spacing="4">
+                <admob:NativeAdHeadline />
+                <admob:NativeAdAdvertiser />
+              </StackPanel>
+              <admob:NativeAdBody Grid.Row="2" Grid.ColumnSpan="2" />
+              <admob:NativeAdCallToAction Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Left" />
+              <admob:NativeAdMedia Grid.Row="4" Grid.ColumnSpan="2" MinHeight="120" />
+            </Grid>
+          </admob:NativeAdView.AdContent>
+        </admob:NativeAdView>
+      </StackPanel>
+    </ScrollViewer>
+  </Grid>
+</UserControl>

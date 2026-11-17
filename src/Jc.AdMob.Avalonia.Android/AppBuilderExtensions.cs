@@ -18,6 +18,7 @@ public static class AppBuilderExtensions
         Avalonia.RewardedAd.ImplementationFactory = unitId => new RewardedAd(options, unitId);
 
         BannerAd.Implementation = new BannerAdAndroid(options);
+        NativeAdView.Implementation = (parent, assets) => new NativeAdViewAndroid(parent, assets);
 
         return appBuilder.AfterSetup(_ =>
         {

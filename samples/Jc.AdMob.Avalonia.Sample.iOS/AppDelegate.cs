@@ -21,13 +21,17 @@ public partial class AppDelegate : AvaloniaAppDelegate<App>
             .UseReactiveUI(_ => { })
             .UseAdMob(new AdMobOptions
             {
-                TestDeviceIds = [],
+                SkipConsent = !App.TestConsentFlow,
+                SkipTransparencyTracking = !App.TestConsentFlow,
                 TagForUnderAgeOfConsent = false,
                 TagForChildDirectedTreatment = false,
             })
             .AfterSetup(_ =>
             {
-                AdMob.Current.Consent.OnConsentInitialized += (_, _) => AdMob.Current.Consent.ShowConsent();
+                if (App.TestConsentFlow)
+                {
+                    AdMob.Current.Consent.OnConsentInitialized += (_, _) => AdMob.Current.Consent.ShowConsent();
+                }
             });
     }
 }
