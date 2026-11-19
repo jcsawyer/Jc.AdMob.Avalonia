@@ -27,19 +27,21 @@ internal sealed class BannerAdAndroid : INativeBannerAd
             }
 
             var context = (parent as AndroidViewControlHandle)?.View.Context ?? Application.Context!;
-            var (width, height) = wrapper.AdSize switch
+            var fixedSize = wrapper.AdSize switch
             {
-                AdSize.Banner => (320, 50),
-                AdSize.FullBanner => (468, 60),
-                AdSize.LargeBanner => (320, 100),
-                AdSize.Leaderboard => (728, 90),
-                AdSize.MediumRectangle => (300, 250),
-                AdSize.WideSkyscraper => (160, 600),
-                _ => (0, 0)
+                AdSize.Banner => SdkAdSize.Banner,
+                AdSize.FullBanner => SdkAdSize.FullBanner,
+                AdSize.LargeBanner => SdkAdSize.LargeBanner,
+                AdSize.Leaderboard => SdkAdSize.Leaderboard,
+                AdSize.MediumRectangle => SdkAdSize.MediumRectangle,
+                // Next-Gen exposes no predefined wide skyscraper size.
+                AdSize.WideSkyscraper => new SdkAdSize(160, 600),
+                _ => null
             };
-            var size = width == 0 ? GetAdaptiveSize(context) : new SdkAdSize(width, height);
+            var adaptive = fixedSize is null;
+            var size = fixedSize ?? GetAdaptiveSize(context);
             var adUnit = string.IsNullOrWhiteSpace(unitId)
-                ? (width == 0 ? AdaptiveTestUnit : FixedTestUnit)
+                ? (adaptive ? AdaptiveTestUnit : FixedTestUnit)
                 : unitId;
 
             var density = context.Resources?.DisplayMetrics?.Density ?? 1;
@@ -49,7 +51,7 @@ internal sealed class BannerAdAndroid : INativeBannerAd
             // Avalonia disposes the hosted view before it calls the handle's cleanup.
             var host = new FrameLayout(context);
             host.AddView(adView, new FrameLayout.LayoutParams(-1, -1));
-            var handle = new BannerHandle(host, adView, wrapper, adUnit, size, width == 0, density,
+            var handle = new BannerHandle(host, adView, wrapper, adUnit, size, adaptive, density,
                 (AdConsentAndroid)AdMob.Current.Consent);
             Dispatcher.UIThread.Post(handle.WaitForAds);
             return handle;
