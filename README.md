@@ -62,6 +62,21 @@ protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
 
 Finally, follow the AdMob platform specific instructions in regard to configuring the application/unit ids.
 
+### Android
+
+The Android package uses GMA Next-Gen. Set `<SupportedOSPlatformVersion>24.0</SupportedOSPlatformVersion>` in your Android app project. If you still support API 23, use the last legacy package.
+
+Pass your Android AdMob application ID as `AdMobOptions.AppId` when calling `.UseAdMob(...)`. Existing apps can also supply the ID through manifest metadata. Keep the following entry inside `<application>` for User Messaging Platform and use the same ID in both places:
+
+```xml
+<meta-data android:name="com.google.android.gms.ads.APPLICATION_ID"
+           android:value="ca-app-pub-XXXXXXXXXXXXXXXX~YYYYYYYYYY" />
+```
+
+Call `.UseAdMob(...)` before loading ads, including when constructing the Android rewarded wrappers directly. Subscribe to `AdMob.Current.OnAdsInitialized` when your app needs to wait for SDK initialization explicitly.
+
+If your app uses mediation, check [Google's Next-Gen adapter compatibility and migration instructions](https://developers.google.com/admob/android/next-gen/migration). Remove direct references to legacy Ads packages and update any adapter that pulls them in. Run `dotnet nuget why <android-project> Xamarin.GooglePlayServices.Ads.Lite` to find the referencing package. Repeat for `Xamarin.GooglePlayServices.Ads` and `Xamarin.GooglePlayServices.Ads.Api` if they appear in your dependency graph.
+
 ### iOS
 
 For iOS projects, from `v11.13.0`, you must add the following to your csproj file to support linking with Swift system libraries:
@@ -198,7 +213,7 @@ The banner exposes the following events:
 | OnAdClicked      |              |
 | OnAdOpened       |              |
 | OnAdClosed       |              |
-| OnAdSwiped       | Android only |
+| OnAdSwiped       | Retained for source compatibility. Next-Gen banners do not raise this event. |
 
 ### Native Advanced ads
 
@@ -233,7 +248,7 @@ Use `Grid` and `StackPanel` to arrange the assets. Include one each of `NativeAd
 
 The attribution defaults to “Ad”. Set `NativeAdAttribution.Text` to a localized equivalent. Leave the top-right corner clear for AdChoices and allow at least 120 × 120 logical units for the media view. Give text room to wrap, and keep other app content outside the ad placement. Google’s SDK handles taps, impressions, AdChoices, and image or video playback. [AdMob layout requirements](https://support.google.com/admob/answer/6329638)
 
-Set `UnitId` to the current platform’s native ad unit for production. An omitted or blank value loads a native demo ad. To test playback, use the [Android native video unit](https://developers.google.com/admob/android/test-ads) or [iOS native video unit](https://developers.google.com/admob/ios/test-ads). In the sample, select **Show Native Image Ad** or **Show Native Video Ad** to open the placement on a separate page. The native sample placements use Google’s demo ad units. Set `App.TestConsentFlow` to `false` to run the demo without the consent prompt. To test consent, enable `App.TestConsentFlow` in the shared sample and use an AdMob app ID with a published consent message in the Android manifest and app options or the iOS Info.plist. Apps using the library still control consent through their own `AdMobOptions`.
+Set `UnitId` to the current platform’s native ad unit for production. An omitted or blank value loads a native demo ad. To test playback, use the [Android native video unit](https://developers.google.com/admob/android/next-gen/test-ads) or [iOS native video unit](https://developers.google.com/admob/ios/test-ads). In the sample, select **Show Native Image Ad** or **Show Native Video Ad** to open the placement on a separate page. The native sample placements use Google’s demo ad units. Set `App.TestConsentFlow` to `false` to run the demo without the consent prompt. To test consent, enable `App.TestConsentFlow` in the shared sample and use an AdMob app ID with a published consent message in the Android manifest and app options or the iOS Info.plist. Apps using the library still control consent through their own `AdMobOptions`.
 
 The control loads once per native attachment after SDK initialization and consent. Set the layout and unit ID before attachment.  
 

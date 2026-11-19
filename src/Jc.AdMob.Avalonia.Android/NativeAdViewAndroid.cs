@@ -1,13 +1,13 @@
 using Android.Content;
-using Android.Gms.Ads;
-using Android.Gms.Ads.NativeAd;
 using Android.Views;
 using Android.Widget;
 using Avalonia;
 using Avalonia.Android;
 using Avalonia.Platform;
-using SdkAd = Android.Gms.Ads.NativeAd.NativeAd;
-using SdkView = Android.Gms.Ads.NativeAd.NativeAdView;
+using Google.Android.Libraries.Ads.Mobile.Sdk.Common;
+using Google.Android.Libraries.Ads.Mobile.Sdk.NativeAd;
+using SdkAd = Google.Android.Libraries.Ads.Mobile.Sdk.NativeAd.INativeAd;
+using SdkView = Google.Android.Libraries.Ads.Mobile.Sdk.NativeAd.NativeAdView;
 
 namespace Jc.AdMob.Avalonia.Android;
 
@@ -21,7 +21,7 @@ internal sealed class NativeAdViewAndroid : NativeAdPlatformView
     private readonly SdkView _adView;
     private readonly View[] _views;
     private readonly float _density;
-    private AdLoader? _loader;
+    private MediaView? _mediaView;
     private Listener? _listener;
     private SdkAd? _ad;
     private bool _disposed;
@@ -53,26 +53,14 @@ internal sealed class NativeAdViewAndroid : NativeAdPlatformView
 
     public override void Load(string? unitId)
     {
-        var options = AdMob.Current.Options;
-        var configuration = MobileAds.RequestConfiguration.ToBuilder()
-            .SetTagForChildDirectedTreatment(options.TagForChildDirectedTreatment ? 1 : -1)
-            .SetTagForUnderAgeOfConsent(options.TagForUnderAgeOfConsent ? 1 : -1);
-        if (options.TestDeviceIds is not null)
-        {
-            configuration.SetTestDeviceIds(options.TestDeviceIds.ToList());
-        }
-
-        MobileAds.RequestConfiguration = configuration.Build();
-
+        using var builder = new NativeAdRequest.Builder(
+            string.IsNullOrWhiteSpace(unitId) ? TestUnit : unitId, [NativeAdNativeAdType.Native!]);
+        AdRequest.ApplyConsent(builder);
         _listener = new Listener(this);
-        _loader = new AdLoader.Builder(_context, string.IsNullOrWhiteSpace(unitId) ? TestUnit : unitId)
-            .ForNativeAd(_listener)
-            .WithAdListener(_listener)
-            .Build();
-        _loader.LoadAd(AdRequest.GetRequest(typeof(global::Google.Ads.Mediation.Admob.AdMobAdapter)));
+        NativeAdLoader.Load(builder.Build(), _listener);
     }
 
-    public override void RegisterAd() => _adView.SetNativeAd(_ad!);
+    public override void RegisterAd() => _adView.RegisterNativeAd(_ad!, _mediaView);
 
     public override bool HasAsset(int index) => _views[index].Visibility == ViewStates.Visible;
 
@@ -125,6 +113,11 @@ internal sealed class NativeAdViewAndroid : NativeAdPlatformView
 
     public override void Dispose()
     {
+        if (_disposed)
+        {
+            return;
+        }
+
         _disposed = true;
         if (_listener is not null)
         {
@@ -134,9 +127,7 @@ internal sealed class NativeAdViewAndroid : NativeAdPlatformView
         _ad?.Destroy();
         _ad?.Dispose();
         _ad = null;
-        _loader?.Dispose();
-        _loader = null;
-        // AdLoader has no cancellation API. The listener still destroys a late ad.
+        // The SDK may still deliver an ad to the listener after the host is destroyed.
         _listener = null;
         _clip.RemoveView(_adView);
         _clip.Visibility = ViewStates.Gone;
@@ -163,10 +154,8 @@ internal sealed class NativeAdViewAndroid : NativeAdPlatformView
             case NativeAdIcon:
                 return _adView.IconView = new ImageView(_context);
             case NativeAdMedia:
-                var media = new MediaView(_context);
-                media.SetImageScaleType(ImageView.ScaleType.FitCenter);
-                _adView.MediaView = media;
-                return media;
+                _mediaView = new MediaView(_context) { ImageScaleType = ImageView.ScaleType.FitCenter };
+                return _mediaView;
             case NativeAdCallToAction:
                 return _adView.CallToActionView = new Button(_context);
             case NativeAdHeadline:
@@ -196,6 +185,14 @@ internal sealed class NativeAdViewAndroid : NativeAdPlatformView
             return;
         }
 
+        if (!AdMob.Current.CanShowAds)
+        {
+            ad.Destroy();
+            ad.Dispose();
+            AdFailed("Consent has not been granted.");
+            return;
+        }
+
         _ad = ad;
         try
         {
@@ -209,8 +206,7 @@ internal sealed class NativeAdViewAndroid : NativeAdPlatformView
             icon.SetImageDrawable(drawable);
             icon.Visibility = drawable is null ? ViewStates.Gone : ViewStates.Visible;
 
-            var media = _adView.MediaView!;
-            media.MediaContent = ad.MediaContent;
+            ad.AdEventCallback = _listener;
             _aspectRatio = ad.MediaContent?.AspectRatio ?? 0;
             AdLoaded();
         }
@@ -236,7 +232,8 @@ internal sealed class NativeAdViewAndroid : NativeAdPlatformView
         ? View.MeasureSpec.MakeMeasureSpec(Pixels(logical), MeasureSpecMode.AtMost)
         : View.MeasureSpec.MakeMeasureSpec(0, MeasureSpecMode.Unspecified);
 
-    private sealed class Listener(NativeAdViewAndroid owner) : AdListener, SdkAd.IOnNativeAdLoadedListener
+    private sealed class Listener(NativeAdViewAndroid owner)
+        : Java.Lang.Object, INativeAdLoaderCallback, INativeAdEventCallback
     {
         public NativeAdViewAndroid? Owner { get; set; } = owner;
 
@@ -253,10 +250,14 @@ internal sealed class NativeAdViewAndroid : NativeAdPlatformView
             }
         });
 
-        public override void OnAdFailedToLoad(LoadAdError error) => Owner?.AdFailed(error.Message);
-        public override void OnAdImpression() => Owner?.AdImpression();
-        public override void OnAdClicked() => Owner?.AdClicked();
-        public override void OnAdOpened() => Owner?.AdOpened();
-        public override void OnAdClosed() => Owner?.AdClosed();
+        public void OnAdFailedToLoad(LoadAdError error)
+        {
+            var message = error.Message;
+            global::Avalonia.Threading.Dispatcher.UIThread.Post(() => Owner?.AdFailed(message));
+        }
+        public void OnAdImpression() => Owner?.AdImpression();
+        public void OnAdClicked() => Owner?.AdClicked();
+        public void OnAdShowedFullScreenContent() => Owner?.AdOpened();
+        public void OnAdDismissedFullScreenContent() => Owner?.AdClosed();
     }
 }

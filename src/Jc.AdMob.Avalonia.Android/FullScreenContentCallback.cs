@@ -1,42 +1,45 @@
-using Android.Gms.Ads;
+using Avalonia.Threading;
+using Google.Android.Libraries.Ads.Mobile.Sdk.AppOpen;
+using Google.Android.Libraries.Ads.Mobile.Sdk.Common;
+using Google.Android.Libraries.Ads.Mobile.Sdk.Interstitial;
+using Google.Android.Libraries.Ads.Mobile.Sdk.Rewarded;
+using Google.Android.Libraries.Ads.Mobile.Sdk.RewardedInterstitial;
 
 namespace Jc.AdMob.Avalonia.Android;
 
-internal sealed class FullScreenContentCallback : global::Android.Gms.Ads.FullScreenContentCallback
+internal sealed class FullScreenContentCallback(
+    Action presented,
+    Action<AdError> failed,
+    Action impression,
+    Action clicked,
+    Action closed)
+    : Java.Lang.Object, IAppOpenAdEventCallback, IInterstitialAdEventCallback,
+      IRewardedAdEventCallback, IRewardedInterstitialAdEventCallback
 {
-    public event EventHandler? AdPresented;
-    public event EventHandler<global::Android.Gms.Ads.AdError>? AdFailedToPresent;
-    public event EventHandler? AdImpression;
-    public event EventHandler? AdClicked;
-    public event EventHandler? AdClosed;
+    public void OnAdShowedFullScreenContent() => Dispatcher.UIThread.Post(presented);
 
-    public override void OnAdShowedFullScreenContent()
+    public void OnAdFailedToShowFullScreenContent(FullScreenContentError error)
     {
-        base.OnAdShowedFullScreenContent();
-        AdPresented?.Invoke(this, EventArgs.Empty);
+        var message = error.Message;
+        Dispatcher.UIThread.Post(() => failed(new AdError(message)));
     }
 
-    public override void OnAdFailedToShowFullScreenContent(global::Android.Gms.Ads.AdError error)
-    {
-        base.OnAdFailedToShowFullScreenContent(error);
-        AdFailedToPresent?.Invoke(this, error);
-    }
+    public void OnAdImpression() => Dispatcher.UIThread.Post(impression);
+    public void OnAdClicked() => Dispatcher.UIThread.Post(clicked);
+    public void OnAdDismissedFullScreenContent() => Dispatcher.UIThread.Post(closed);
+}
 
-    public override void OnAdImpression()
-    {
-        base.OnAdImpression();
-        AdImpression?.Invoke(this, EventArgs.Empty);
-    }
+internal sealed class RewardListener(Action<RewardItem> earned)
+    : Java.Lang.Object, IOnUserEarnedRewardListener
+{
+    private int _delivered;
 
-    public override void OnAdClicked()
+    public void OnUserEarnedReward(IRewardItem reward)
     {
-        base.OnAdClicked();
-        AdClicked?.Invoke(this, EventArgs.Empty);
-    }
-
-    public override void OnAdDismissedFullScreenContent()
-    {
-        base.OnAdDismissedFullScreenContent();
-        AdClosed?.Invoke(this, EventArgs.Empty);
+        if (Interlocked.Exchange(ref _delivered, 1) == 0)
+        {
+            var item = new RewardItem(reward.Amount, reward.Type);
+            Dispatcher.UIThread.Post(() => earned(item));
+        }
     }
 }
